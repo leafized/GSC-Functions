@@ -6,10 +6,14 @@ If any script requires a utility outside of itself, it will be provided in the s
 
 This project is going to be maintained, and I will be sure to credit the creators.
 # Credits
+
+Extinct, CF4_99, Candy, P!X, Serious (This project may not directly use any of their work, however I've learned from these people.)
+Gillam, has been a big partner of mine, and deserved his own place in these credits.
+P!X, has taught me a lot of what I know today, and is the creator of my first menu base.
+
 Shiversoftdev - t7, t8 sources and compiler.
 Compiler link for t7, t8: https://github.com/shiversoftdev/t7-compiler 
 Compiler link for t7, t6,t5,t4,iw4,iw5,iw6,s2 https://infinityloader.com
-Extinct, CF4_99, Candy, P!X, Serious (This project may not directly use any of their work, however I've learned from these people.)
 # Information about this repository
 This repository is a collection of scripts I am currently writing, or have written in the past.
 These scripts should help mod developers with their work if they choose to use it.
