@@ -8,7 +8,9 @@ This project is going to be maintained, and I will be sure to credit the creator
 # Credits
 
 Extinct, CF4_99, Candy, P!X, Serious (This project may not directly use any of their work, however I've learned from these people.)
+
 Gillam, has been a big partner of mine, and deserved his own place in these credits.
+
 P!X, has taught me a lot of what I know today, and is the creator of my first menu base.
 
 Shiversoftdev - t7, t8 sources and compiler.
