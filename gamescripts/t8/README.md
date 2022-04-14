@@ -1,3 +1,5 @@
+readme from shiversoftdev's repo.
+
 # Decompiled BO4 GSC/CSC Scripts
 This is a repository containing my best attempt at decompiling the scripts for BO4\
 \
