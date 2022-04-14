@@ -1,0 +1,4117 @@
+//==========================================================================
+// Character Animation Script     M U L T I P L A Y E R
+// ANIMATIONS - PART 1
+// NOTE: scripts are chosen by first-come-first-serve basis. The first match found is the one used.
+//
+// format:
+// state <state description>
+// {
+//		<movement type>
+//		{
+//			[DEFAULT / <condition type> [<condition value>], ...]
+//			{
+//				<both/legs/torso/turret> <animation> [sound <filename>]
+//				<both/legs/torso/turret> <animation> [sound <filename>]
+//				...
+//			}
+//		}
+//	}
+//
+//	legend:
+//	<state description>: relaxed, alert, combat
+//
+//	<movement type>: idle, idlecr, idleprone,
+//                   walk, walkbk, walkcr, walkcrbk, walkprone, walkpronebk,
+//                   run, runbk, runcr, runcrbk,
+//                   straferight, strafeleft, turnright, turnleft,
+//                   idlelaststand, crawllaststand, crawllaststandbk, mantle
+//
+//	<condition type>: playerAnimType, playerAnimTypePrimary, weaponclass, weaponAttachment, position, enemy_weapon, underwater, mounted, 
+//					moveType, leaning, weapon_position, perk, damagetype, hitlocation, hitdirection, 
+//					firing, akimbo, nextweapon, mantle_state, characterType, ladderpeek, swimming, nextweapon_akimbo, nextweapon_tactical_knife
+//
+//	<condition value>:
+//		playerAnimType: <weapon Player Anim Type in gdt of active weapon>
+//		playerAnimTypePrimary: <weapon Player Anim Type in gdt of primary weapon (not offhand)>
+//		position: behind, infront, right, left
+//		enemy_weapon: <see weapon pickup names>
+//		underwater: <no values>
+//		mounted: mg42, remote, tank, plant
+//		moveType: <see movement types>
+//		leaning: right, left
+//		weaponclass: rifle, sniper, smg, mg, pistol, grenade, rocketlauncher, flamethrower, turret, non-player, throwingknife
+//		weaponAttachment: name of attachment on weapon
+//		weapon_position: hip, ads
+//		strafing: not, left, right - will never be left or right while moving backwards
+//		perk: grenadedeath
+//		damagetype: damage_bullet, damage_explosion_light, damage_explosion, damage_melee, damage_dog_melee, damage_fire
+//		hitlocation: hit_torso, hit_head, hit_neck, hit_legs
+//		hitdirection: hit_front, hit_left, hit_right, hit_back
+//		firing: true/false
+//		using_alternate: true/false
+//		akimbo: true/false
+//		nextweapon: <weapon Player Anim Type in gdt of weapon being switched to>
+//		nextweapon_akimbo: weapon being switched to has akimbo attachment
+//		nextweapon_tactical_knife: weapon being switched to has tactical knife attachment
+//		mantle_state: none, 
+//					mantle_up_64, mantle_up_56, mantle_up_48, mantle_up_40, mantle_up_32, mantle_up_24, mantle_up_16
+//					mantle_over_64, mantle_over_56, mantle_over_48, mantle_over_40, mantle_over_32, mantle_over_24, mantle_over_16
+//		female: true/false
+//
+// NOTES:
+// - The player walks when they are ADS, so they can not ADS while running.
+// - "mounted plant" is a flag used for weapon plant.  Turrets still use "mounted mg42".
+// - Full list of events can be found at bg_animations_mp.cpp, animEventTypesStr[].
+//==========================================================================
+
+ANIMATIONS
+
+STATE COMBAT
+{
+	idle
+	{
+		swimming
+		{
+			face mp_s2_facial_bs_idle
+			both mp_swimming_idle
+			aim idle_combatknife_aims
+		}
+		mounted mg42, gamemode hub
+		{
+			face mp_s2_facial_bs_idle
+			both flak38gunner_aim turretanim
+		}
+		mounted plant
+		{
+			face mp_s2_facial_bs_idle
+			both nonproneSAWgunner_aim turretanim
+		}
+		mounted mg42
+		{
+			face mp_s2_facial_bs_idle
+			both standSAWgunner_aim turretanim
+		}
+		mounted remote
+		{
+			face mp_s2_facial_bs_idle
+			both pb_stand_tablet
+		}
+		mounted tank
+		{
+			face mp_s2_facial_bs_idle
+			both standTankgunner_aim turretanim
+		}
+		playerAnimType lobby
+		{
+			face mp_s2_facial_bs_idle
+			both mp_unarmed_stand_idle
+			aim idle_unarmed_aims
+			blendtime 300
+			turns
+			{
+				turnleft mp_unarmed_stand_turn_l aim idle_unarmed_aims
+				turnright mp_unarmed_stand_turn_r aim idle_unarmed_aims
+			}
+			twitches
+			{
+				mp_unarmed_stand_idle aim idle_unarmed_aims
+			}
+		}
+		playerAnimType empty
+		{
+			face mp_s2_facial_bs_idle
+			both mp_none_stand_idle
+		}
+		ball_carrier
+		{
+			face mp_s2_facial_bs_idle
+			both mp_uplink_stand_idle
+			aim idle_uplink_ball_aim
+			turns
+			{
+				turnleft mp_uplink_stand_turn_l aim idle_uplink_ball_aim
+				turnright mp_uplink_stand_turn_r aim idle_uplink_ball_aim
+			}
+			twitches
+			{
+				mp_uplink_stand_twitch_a aim idle_uplink_ball_aim
+				mp_uplink_stand_twitch_b aim idle_uplink_ball_aim
+			}
+		}
+		playerAnimType carepackage
+		{
+			face mp_s2_facial_bs_idle
+			both mp_carepackage_stand_idle
+			aim idle_combatknife_aims
+
+			turns
+			{
+				turnleft mp_carepackage_stand_aim_turn_l aim idle_combatknife_aims
+				turnright mp_carepackage_stand_aim_turn_r aim idle_combatknife_aims
+			}
+
+			twitches
+			{
+				mp_carepackage_stand_idle_twitch_a aim idle_combatknife_aims
+				mp_carepackage_stand_idle_twitch_b aim idle_combatknife_aims
+				mp_carepackage_stand_idle_twitch_c aim idle_combatknife_aims
+				mp_carepackage_stand_idle_twitch_d aim idle_combatknife_aims
+			}
+		}
+		playerAnimTypePrimary combatknife AND shovel
+		{
+			face mp_s2_facial_bs_idle
+			both mp_jug_maniac_idle
+			aim idle_combatknife_aims
+			turns
+			{
+				turnleft mp_jug_maniac_turn_l aim idle_combatknife_aims
+				turnright mp_jug_maniac_turn_r aim idle_combatknife_aims
+			}
+			
+			twitches
+			{
+				mp_jug_maniac_twitcha aim idle_combatknife_aims
+				mp_jug_maniac_twitchb aim idle_combatknife_aims
+				mp_jug_maniac_twitchc aim idle_combatknife_aims
+				mp_jug_maniac_twitchd aim idle_combatknife_aims
+			}
+		}
+		playerAnimTypePrimary twohandedmelee
+		{
+			face mp_s2_facial_bs_idle
+			both mp_sword_stand_idle
+			aim idle_sword_aims
+			turns
+			{
+				turnleft mp_sword_stand_aim_turn_l aim idle_sword_aims
+				turnright mp_sword_stand_aim_turn_r aim idle_sword_aims
+			}
+			
+			twitches
+			{
+				mp_sword_stand_idle_twitch_a aim idle_sword_aims
+				mp_sword_stand_idle_twitch_b aim idle_sword_aims
+			}
+		}
+		playerAnimTypePrimary riotshield
+		{
+			face mp_s2_facial_bs_idle
+			both mp_shield_stand_idle
+			aim idle_shield_aims
+			turns
+			{
+				turnleft mp_shield_stand_aim_turn_l aim idle_shield_aims
+				turnright mp_shield_stand_aim_turn_r aim idle_shield_aims
+			}
+			
+			twitches
+			{
+				mp_shield_stand_idle_twitch_a aim idle_shield_aims
+				mp_shield_stand_idle_twitch_b aim idle_shield_aims
+			}
+		}
+		playerAnimType bangalore
+		{
+			face mp_s2_facial_bs_idle
+			both mp_tool_bangalore_stand_idle notbaseidle
+		}
+		playerAnimType tntbundle
+		{
+			face mp_s2_facial_bs_idle
+			both mp_tool_tntbundle_stand_idle notbaseidle
+		}
+		playerAnimType briefcase
+		{
+			face mp_s2_facial_bs_idle
+			both mp_srchdstry_stand_bomb_idle notbaseidle
+		}
+		playerAnimType hammer
+		{
+			face mp_s2_facial_bs_idle
+			both mp_tool_stand_hammer_loop notbaseidle
+		}
+		playerAnimType wrench
+		{
+			face mp_s2_facial_bs_idle
+			both mp_tool_stand_wrench_loop notbaseidle
+		}
+		playerAnimType genericuse
+		{
+			face mp_s2_facial_bs_idle
+			both mp_raids_generic_stand_use_idle notbaseidle
+		}
+		playerAnimType laptop
+		{
+			face mp_s2_facial_bs_idle
+			both pb_stand_tablet
+		}
+		weaponclass autofire AND spread, weapon_position ads
+		{
+			face mp_s2_facial_bs_idle
+			both mp_smg_stand_idle_ads
+			aim idle_rifle_aims
+			turns
+			{
+				turnleft mp_smg_stand_aim_turn_l aim idle_rifle_aims
+				turnright mp_smg_stand_aim_turn_r aim idle_rifle_aims
+			}
+		}
+		weaponclass autofire AND spread
+		{
+			face mp_s2_facial_bs_idle
+			both mp_smg_stand_idle
+			aim idle_rifle_aims
+			turns
+			{
+				turnleft mp_smg_stand_aim_turn_l aim idle_rifle_aims
+				turnright mp_smg_stand_aim_turn_r aim idle_rifle_aims
+			}
+			
+			twitches
+			{
+				mp_smg_stand_idle_twitch_a aim idle_rifle_aims
+				mp_smg_stand_idle_twitch_b aim idle_rifle_aims
+				mp_smg_stand_idle_twitch_c aim idle_rifle_aims
+				mp_smg_stand_idle_twitch_d aim idle_rifle_aims
+				mp_smg_stand_idle_twitch_e aim idle_rifle_aims
+			}
+		}
+		akimbo
+		{
+			face mp_s2_facial_bs_idle
+			both mp_akimbo_stand_idle
+			aim idle_akimbo_aims
+			turns
+			{
+				turnleft mp_akimbo_stand_turn_l aim idle_akimbo_aims
+				turnright mp_akimbo_stand_turn_r aim idle_akimbo_aims
+			}
+			
+			twitches
+			{
+				mp_akimbo_stand_twitch_a aim idle_akimbo_aims
+				mp_akimbo_stand_twitch_b aim idle_akimbo_aims
+				mp_akimbo_stand_twitch_c aim idle_akimbo_aims
+			}
+		}
+		playerAnimTypePrimary pistol, weapon_position ads, tactical_knife
+		{
+			face mp_s2_facial_bs_idle
+			both mp_tacknife_stand_idle_ads
+			aim idle_pistol_aims
+			turns
+			{
+				turnleft mp_tacknife_stand_aim_turn_l aim idle_pistol_aims
+				turnright mp_tacknife_stand_aim_turn_r aim idle_pistol_aims
+			}
+		}
+		playerAnimTypePrimary pistol, tactical_knife
+		{
+			face mp_s2_facial_bs_idle
+			both mp_tacknife_stand_idle
+			aim idle_pistol_aims
+			turns
+			{
+				turnleft mp_tacknife_stand_aim_turn_l aim idle_pistol_aims
+				turnright mp_tacknife_stand_aim_turn_r aim idle_pistol_aims
+			}
+			twitches
+			{
+				mp_tacknife_stand_idle_twitch_a aim idle_pistol_aims
+				mp_tacknife_stand_idle_twitch_b aim idle_pistol_aims
+				mp_tacknife_stand_idle_twitch_c aim idle_pistol_aims
+			}
+		}
+		playerAnimTypePrimary pistol, weapon_position ads
+		{
+			face mp_s2_facial_bs_idle
+			both mp_pistol_stand_idle_ads
+			aim idle_pistol_aims
+			turns
+			{
+				turnleft mp_pistol_stand_turn_l aim idle_pistol_aims
+				turnright mp_pistol_stand_turn_r aim idle_pistol_aims
+			}
+		}
+		playerAnimTypePrimary pistol
+		{
+			face mp_s2_facial_bs_idle
+			both mp_pistol_stand_idle
+			aim idle_pistol_aims
+			turns
+			{
+				turnleft mp_pistol_stand_turn_l aim idle_pistol_aims
+				turnright mp_pistol_stand_turn_r aim idle_pistol_aims
+			}
+			twitches
+			{
+				mp_pistol_twitch_a aim idle_pistol_aims
+				mp_pistol_twitch_b aim idle_pistol_aims
+				mp_pistol_twitch_c aim idle_pistol_aims
+				mp_pistol_twitch_d aim idle_pistol_aims
+				mp_pistol_twitch_e aim idle_pistol_aims
+			}
+		}
+		playerAnimTypePrimary pistolcarry, weapon_position ads
+		{
+			face mp_s2_facial_bs_idle
+			both mp_pistol_carry_stand_idle_ads
+			aim idle_pistol_aims
+			turns
+			{
+				turnleft mp_pistol_carry_stand_turn_l aim idle_pistol_aims
+				turnright mp_pistol_carry_stand_turn_r aim idle_pistol_aims
+			}
+		}
+		playerAnimTypePrimary pistolcarry
+		{
+			face mp_s2_facial_bs_idle
+			both mp_pistol_carry_stand_idle
+			aim idle_pistol_aims
+			turns
+			{
+				turnleft mp_pistol_carry_stand_turn_l aim idle_pistol_aims
+				turnright mp_pistol_carry_stand_turn_r aim idle_pistol_aims
+			}
+			twitches
+			{
+				mp_pistol_carry_stand_twitch_a
+				mp_pistol_carry_stand_twitch_b
+				mp_pistol_carry_stand_twitch_c
+			}
+		}
+		playerAnimTypePrimary rocketlauncher, weapon_position ads
+		{
+			face mp_s2_facial_bs_idle
+			both mp_rpg_stand_ads
+			aim idle_ads_rocket_aims
+			turns
+			{
+				turnleft mp_rpg_ads_turnl aim idle_ads_rocket_aims
+				turnright mp_rpg_ads_turnr aim idle_ads_rocket_aims
+			}
+		}
+		playerAnimTypePrimary rocketlauncher
+		{
+			face mp_s2_facial_bs_idle
+			both mp_rpg_idle
+			aim idle_rocket_aims
+			turns
+			{
+				turnleft mp_rpg_turnl aim idle_rocket_aims
+				turnright mp_rpg_turnr aim idle_rocket_aims
+			}
+			twitches
+			{
+				mp_rpg_twitch_a aim idle_rocket_aims
+				mp_rpg_twitch_b aim idle_rocket_aims
+				mp_rpg_twitch_c aim idle_rocket_aims
+				mp_rpg_twitch_d aim idle_rocket_aims
+			}
+		}
+		weapon_position ads
+		{
+			face mp_s2_facial_bs_idle
+			both mp_stand_ADS_aim_5
+			aim idle_rifle_aims
+			lean stand_lean
+			turns
+			{
+				turnleft mp_stand_aim_turn_l aim idle_rifle_aims
+				turnright mp_stand_aim_turn_r aim idle_rifle_aims
+			}
+		}
+		default
+		{
+			face mp_s2_facial_bs_idle
+			twitches
+			{
+				mp_s2_facial_bs_blinks
+				mp_s2_facial_bs_short_idle
+			}
+			both mp_stand_idle
+			aim idle_rifle_aims
+			turns
+			{
+				turnleft mp_stand_aim_turn_l aim idle_rifle_aims
+				turnright mp_stand_aim_turn_r aim idle_rifle_aims
+			}
+			twitches
+			{
+				mp_stand_idle_twitch_a aim idle_rifle_aims
+				mp_stand_idle_twitch_b aim idle_rifle_aims
+				mp_stand_idle_twitch_c aim idle_rifle_aims
+				mp_stand_idle_twitch_d aim idle_rifle_aims
+				mp_stand_idle_twitch_e aim idle_rifle_aims
+			}
+		}
+
+		transitions
+		{
+			moveType run
+			{
+				goto idle2run
+			}
+			moveType walk
+			{
+				goto idle2walk
+			}
+			moveType runbk
+			{
+				goto idle2runbk
+			}
+			moveType walkbk
+			{
+				goto idle2walkbk
+			}
+			moveType sprint
+			{
+				goto idle2sprint
+			}
+			moveType idlecr
+			{
+				goto idle2idlecr
+			}
+		}
+	}
+	idle2idlecr sync stand2crouch_group
+	{
+		weaponclass autofire AND spread
+		{
+			both mp_smg_stand_2_crouch
+			idle_transition
+			aim crouch_rifle_aims
+		}
+		playerAnimType lobby
+		{
+			both mp_unarmed_stand_2_crouch
+			aim crouch_unarmed_aims
+		}
+		ball_carrier
+		{
+			both mp_uplink_stand_2_crouch
+			idle_transition
+			aim crouch_uplink_ball_aims
+		}
+		playerAnimType carepackage
+		{
+			both mp_carepackage_stand_2_crouch
+			idle_transition
+			aim crouch_combatknife_aims
+		}
+		playerAnimTypePrimary combatknife AND shovel
+		{
+			both mp_jug_maniac_stand_2_crouch
+			idle_transition
+			aim crouch_combatknife_aims
+		}
+		playerAnimTypePrimary twohandedmelee
+		{
+			both mp_sword_stand_2_crouch
+			idle_transition
+			aim crouch_sword_aims
+		}
+		playerAnimTypePrimary riotshield
+		{
+			both mp_shield_stand_2_crouch
+			idle_transition
+			aim crouch_shield_aims
+		}
+		playerAnimTypePrimary rocketlauncher
+		{
+			both mp_rpg_stand_2_crouch
+			idle_transition
+			aim crouch_rocket_aims
+		}
+		akimbo
+		{
+			both mp_akimbo_stand_2_crouch
+			idle_transition
+			aim crouch_akimbo_aims
+		}
+		playerAnimTypePrimary pistol, weaponAttachment tactical_knife
+		{
+			both mp_tacknife_stand_2_crouch
+			idle_transition
+			aim crouch_pistol_aims
+		}
+		playerAnimTypePrimary pistol
+		{
+			both mp_pistol_stand_2_crouch
+			idle_transition
+			aim crouch_pistol_aims
+		}
+		playerAnimTypePrimary pistolcarry
+		{
+			both mp_pistol_carry_stand_2_crouch
+			idle_transition
+			aim crouch_pistol_aims
+		}
+		playerAnimType hammer
+		{
+			both mp_tool_hammer_stand_2_crouch
+			idle_transition
+		}
+		playerAnimType wrench
+		{
+			both mp_tool_wrench_stand_2_crouch
+			idle_transition
+		}
+		playerAnimType genericuse
+		{
+			both mp_raids_generic_stand_2_crouch_use
+			idle_transition
+		}
+		default
+		{
+			both mp_stand_2_crouch 
+			idle_transition
+			aim crouch_rifle_aims
+		}
+		
+		transitions
+		{
+			moveType idlecr
+			{
+				ignore
+			}
+			moveType idle
+			{
+				goto idlecr2idle
+			}
+			moveType run
+			{
+				goto idle2run
+			}
+			moveType walk
+			{
+				goto idle2walk
+			}
+			moveType runbk
+			{
+				goto idle2runbk
+			}
+			moveType sprint
+			{
+				goto idlecr2sprint
+			}
+			moveType walkcr, runcr
+			{
+				goto idlecr2walkcr
+			}
+			moveType walkcrbk, runcrbk
+			{
+				goto idlecr2walkcrbk
+			}
+			moveType idleprone, walkprone
+			{
+				goto idlecr2idleprone
+			}
+			anim_complete
+			{
+				goto idlecr
+			}
+		}
+	}
+	idle2walk sync stand2move_group
+	{
+		weaponclass autofire AND spread, strafing left
+		{
+			both mp_smg_stand_2_stand_walk_l
+			speed_scaled_transition 0.5
+			aim run_rifle_L_aims
+		}
+		weaponclass autofire AND spread, strafing right
+		{
+			both mp_smg_stand_2_stand_walk_r
+			speed_scaled_transition 0.5
+			aim run_rifle_R_aims
+		}
+		weaponclass autofire AND spread
+		{
+			both mp_smg_stand_2_stand_walk_f
+			speed_scaled_transition 0.5
+			aim run_rifle_F_aims
+		}
+		playerAnimType lobby, strafing left
+		{
+			both mp_unarmed_stand_2_walk_l
+			aim run_unarmed_L_aims
+		}
+		playerAnimType lobby, strafing right
+		{
+			both mp_unarmed_stand_2_walk_r
+			aim run_unarmed_R_aims
+		}
+		playerAnimType lobby
+		{
+			both mp_unarmed_stand_2_walk_f
+			aim run_unarmed_F_aims
+		}
+		ball_carrier, strafing left
+		{
+			both mp_uplink_stand_2_stand_walk_l
+			aim run_uplink_ball_L_aims
+		}
+		ball_carrier, strafing right
+		{
+			both mp_uplink_stand_2_stand_walk_r
+			aim run_uplink_ball_R_aims
+		}
+		ball_carrier
+		{
+			both mp_uplink_stand_2_stand_walk_f
+			aim run_uplink_ball_F_aims
+		}
+		playerAnimTypePrimary rocketlauncher, weapon_position ads, strafing left
+		{
+			both mp_rpg_stand_2_walk_l_ads
+			aim run_rocket_L_aims
+		}
+		playerAnimTypePrimary rocketlauncher, weapon_position ads, strafing right
+		{
+			both mp_rpg_stand_2_walk_r_ads
+			aim run_rocket_R_aims
+		}
+		playerAnimTypePrimary rocketlauncher, weapon_position ads
+		{
+			both mp_rpg_stand_2_walk_f_ads
+			aim run_rocket_F_aims
+		}
+		playerAnimTypePrimary rocketlauncher, strafing left
+		{
+			both mp_rpg_stand_2_walk_l
+			aim run_rocket_L_aims
+		}
+		playerAnimTypePrimary rocketlauncher, strafing right
+		{
+			both mp_rpg_stand_2_walk_r
+			aim run_rocket_R_aims
+		}
+		playerAnimTypePrimary rocketlauncher
+		{
+			both mp_rpg_stand_2_walk_f
+			aim run_rocket_F_aims
+		}
+		playerAnimTypePrimary carepackage, strafing left
+		{
+			both mp_carepackage_stand_2_stand_walk_l
+			speed_scaled_transition
+			aim run_combatknife_L_aims
+		}
+		playerAnimTypePrimary carepackage, strafing right
+		{
+			both mp_carepackage_stand_2_stand_walk_r
+			speed_scaled_transition
+			aim run_combatknife_R_aims
+		}
+		playerAnimType carepackage
+		{
+			both mp_carepackage_stand_2_stand_walk_f
+			speed_scaled_transition
+			aim run_combatknife_F_aims
+		}
+		playerAnimTypePrimary combatknife AND shovel, strafing left
+		{
+			both mp_jug_maniac_stand_2_walk_l
+			speed_scaled_transition
+			aim run_combatknife_L_aims
+		}
+		playerAnimTypePrimary combatknife AND shovel, strafing right
+		{
+			both mp_jug_maniac_stand_2_walk_r
+			speed_scaled_transition
+			aim run_combatknife_R_aims
+		}
+		playerAnimTypePrimary combatknife AND shovel
+		{
+			both mp_jug_maniac_stand_2_walk_f
+			speed_scaled_transition
+			aim run_combatknife_F_aims
+		}
+		playerAnimTypePrimary twohandedmelee, strafing left
+		{
+			both mp_sword_stand_2_stand_walk_l
+			aim run_sword_L_aims
+		}
+		playerAnimTypePrimary twohandedmelee, strafing right
+		{
+			both mp_sword_stand_2_stand_walk_r
+			aim run_sword_R_aims
+		}
+		playerAnimTypePrimary twohandedmelee
+		{
+			both mp_sword_stand_2_stand_walk_f
+			aim run_sword_F_aims
+		}
+		playerAnimTypePrimary riotshield, strafing left
+		{
+			both mp_shield_stand_2_stand_walk_l
+			aim run_shield_L_aims
+		}
+		playerAnimTypePrimary riotshield, strafing right
+		{
+			both mp_shield_stand_2_stand_walk_r
+			aim run_shield_R_aims
+		}
+		playerAnimTypePrimary riotshield
+		{
+			both mp_shield_stand_2_stand_walk_f
+			aim run_shield_F_aims
+		}
+		akimbo, strafing left
+		{
+			both mp_akimbo_stand_2_stand_walk_l
+			aim run_akimbo_L_aims
+		}
+		akimbo, strafing right
+		{
+			both mp_akimbo_stand_2_stand_walk_r
+			aim run_akimbo_R_aims
+		}
+		akimbo
+		{
+			both mp_akimbo_stand_2_stand_walk_f
+			aim run_akimbo_F_aims
+		}
+		playerAnimTypePrimary pistol, strafing left, weaponAttachment tactical_knife
+		{
+			both mp_tacknife_stand_2_stand_walk_l
+			aim run_pistol_L_aims
+		}
+		playerAnimTypePrimary pistol, strafing right, weaponAttachment tactical_knife
+		{
+			both mp_tacknife_stand_2_stand_walk_r
+			aim run_pistol_R_aims
+		}
+		playerAnimTypePrimary pistol, weaponAttachment tactical_knife
+		{
+			both mp_tacknife_stand_2_stand_walk_f
+			aim run_pistol_F_aims
+		}
+		playerAnimTypePrimary pistol, strafing left
+		{
+			both mp_pistol_stand_2_walk_l
+			aim run_pistol_L_aims
+		}
+		playerAnimTypePrimary pistol, strafing right
+		{
+			both mp_pistol_stand_2_walk_r
+			aim run_pistol_R_aims
+		}
+		playerAnimTypePrimary pistol
+		{
+			both mp_pistol_stand_2_walk_f
+			aim run_pistol_F_aims
+		}
+		playerAnimTypePrimary pistolcarry, strafing left
+		{
+			both mp_pistol_carry_stand_2_walk_l
+			aim run_pistol_L_aims
+		}
+		playerAnimTypePrimary pistolcarry, strafing right
+		{
+			both mp_pistol_carry_stand_2_walk_r
+			aim run_pistol_R_aims
+		}
+		playerAnimTypePrimary pistolcarry
+		{
+			both mp_pistol_carry_stand_2_walk_f
+			aim run_pistol_F_aims
+		}
+		strafing left
+		{
+			both mp_stand_2_walk_l
+			aim run_rifle_L_aims
+		}
+		strafing right
+		{
+			both mp_stand_2_walk_r
+			aim run_rifle_R_aims
+		}
+		default
+		{
+			both mp_stand_2_walk_f
+			aim run_rifle_F_aims
+		}
+		
+		transitions
+		{
+			moveType walk
+			{
+				ignore
+			}
+			moveType run
+			{
+				goto idle2run
+			}
+			moveType runbk
+			{
+				goto idle2runbk
+			}
+			moveType sprint
+			{
+				goto idle2sprint
+			}
+			moveType walkcr, runcr
+			{
+				goto idlecr2walkcr
+			}
+			moveType walkcrbk, runcrbk
+			{
+				goto idlecr2walkcrbk
+			}
+			moveType idle
+			{
+				goto walk2idle
+			}
+			anim_complete
+			{
+				goto walk
+			}
+		}
+	}
+	
+	idle2walkbk sync stand2move_group
+	{
+		weaponclass autofire AND spread, strafing right
+		{
+			both mp_smg_stand_2_stand_walk_r
+			aim run_rifle_R_aims
+		}
+		weaponclass autofire AND spread, strafing left
+		{
+			both mp_smg_stand_2_stand_walk_l
+			aim run_rifle_L_aims
+		}
+		weaponclass autofire AND spread
+		{
+			both mp_smg_stand_2_stand_walk_b
+			speed_scaled_transition 0.55
+			aim run_rifle_F_aims
+		}
+		playerAnimType lobby, strafing left
+		{
+			both mp_unarmed_stand_2_walk_l
+			aim run_unarmed_L_aims
+		}
+		playerAnimType lobby, strafing right
+		{
+			both mp_unarmed_stand_2_walk_r
+			aim run_unarmed_R_aims
+		}
+		playerAnimType lobby
+		{
+			both mp_unarmed_stand_2_walk_b
+			aim run_unarmed_F_aims
+		}
+		playerAnimTypePrimary rocketlauncher, weapon_position ads, strafing left
+		{
+			both mp_rpg_stand_2_walk_l_ads
+			aim run_rocket_L_aims
+		}
+		playerAnimTypePrimary rocketlauncher, weapon_position ads, strafing right
+		{
+			both mp_rpg_stand_2_walk_r_ads
+			aim run_rocket_R_aims
+		}
+		playerAnimTypePrimary rocketlauncher, weapon_position ads
+		{
+			both mp_rpg_stand_2_walk_b_ads
+			aim run_rocket_F_aims
+		}
+		playerAnimTypePrimary rocketlauncher, strafing left
+		{
+			both mp_rpg_stand_2_walk_l
+			aim run_rocket_L_aims
+		}
+		playerAnimTypePrimary rocketlauncher, strafing right
+		{
+			both mp_rpg_stand_2_walk_r
+			aim run_rocket_R_aims
+		}
+		playerAnimTypePrimary rocketlauncher
+		{
+			both mp_rpg_stand_2_walk_b
+			aim run_rocket_F_aims
+		}
+		ball_carrier, strafing left
+		{
+			both mp_uplink_stand_2_stand_walk_l
+			aim run_uplink_ball_L_aims
+		}
+		ball_carrier, strafing right
+		{
+			both mp_uplink_stand_2_stand_walk_r
+			aim run_uplink_ball_R_aims
+		}
+		ball_carrier
+		{
+			both mp_uplink_stand_2_stand_walk_b
+			aim run_uplink_ball_F_aims
+		}
+		playerAnimTypePrimary carepackage, strafing left
+		{
+			both mp_carepackage_stand_2_stand_walk_l
+			aim run_combatknife_L_aims
+		}
+		playerAnimTypePrimary carepackage, strafing right
+		{
+			both mp_carepackage_stand_2_stand_walk_r
+			aim run_combatknife_R_aims
+		}
+		playerAnimType carepackage
+		{
+			both mp_carepackage_stand_2_stand_walk_b
+			speed_scaled_transition
+			aim run_combatknife_F_aims
+		}
+		playerAnimTypePrimary combatknife AND shovel, strafing left
+		{
+			both mp_jug_maniac_stand_2_walk_l
+			aim run_combatknife_L_aims
+		}
+		playerAnimTypePrimary combatknife AND shovel, strafing right
+		{
+			both mp_jug_maniac_stand_2_walk_r
+			aim run_combatknife_R_aims
+		}
+		playerAnimTypePrimary combatknife AND shovel
+		{
+			both mp_jug_maniac_stand_2_walk_b
+			speed_scaled_transition
+			aim run_combatknife_F_aims
+		}
+		playerAnimTypePrimary twohandedmelee, strafing left
+		{
+			both mp_sword_stand_2_stand_walk_l
+			aim run_sword_L_aims
+		}
+		playerAnimTypePrimary twohandedmelee, strafing right
+		{
+			both mp_sword_stand_2_stand_walk_r
+			aim run_sword_R_aims
+		}
+		playerAnimTypePrimary twohandedmelee
+		{
+			both mp_sword_stand_2_stand_walk_b
+			aim run_sword_F_aims
+		}
+		playerAnimTypePrimary riotshield, strafing left
+		{
+			both mp_shield_stand_2_stand_walk_l
+			aim run_shield_L_aims
+		}
+		playerAnimTypePrimary riotshield, strafing right
+		{
+			both mp_shield_stand_2_stand_walk_r
+			aim run_shield_R_aims
+		}
+		playerAnimTypePrimary riotshield
+		{
+			both mp_shield_stand_2_stand_walk_b
+			aim run_shield_F_aims
+		}
+		akimbo, strafing left
+		{
+			both mp_akimbo_stand_2_stand_walk_l
+			aim run_akimbo_L_aims
+		}
+		akimbo, strafing right
+		{
+			both mp_akimbo_stand_2_stand_walk_r
+			aim run_akimbo_R_aims
+		}
+		akimbo
+		{
+			both mp_akimbo_stand_2_stand_walk_b
+			aim run_akimbo_F_aims
+		}
+		playerAnimTypePrimary pistol, strafing left, weaponAttachment tactical_knife
+		{
+			both mp_tacknife_stand_2_stand_walk_l
+			aim run_pistol_L_aims
+		}
+		playerAnimTypePrimary pistol, strafing right, weaponAttachment tactical_knife
+		{
+			both mp_tacknife_stand_2_stand_walk_r
+			aim run_pistol_R_aims
+		}
+		playerAnimTypePrimary pistol, weaponAttachment tactical_knife
+		{
+			both mp_tacknife_stand_2_stand_walk_b
+			aim run_pistol_F_aims
+		}
+		playerAnimTypePrimary pistol, strafing left
+		{
+			both mp_pistol_stand_2_walk_l
+			aim run_pistol_L_aims
+		}
+		playerAnimTypePrimary pistol, strafing right
+		{
+			both mp_pistol_stand_2_walk_r
+			aim run_pistol_R_aims
+		}
+		playerAnimTypePrimary pistol
+		{
+			both mp_pistol_stand_2_walk_b
+			aim run_pistol_F_aims
+		}
+		playerAnimTypePrimary pistolcarry, strafing left
+		{
+			both mp_pistol_carry_stand_2_walk_l
+			aim run_pistol_L_aims
+		}
+		playerAnimTypePrimary pistolcarry, strafing right
+		{
+			both mp_pistol_carry_stand_2_walk_r
+			aim run_pistol_R_aims
+		}
+		playerAnimTypePrimary pistolcarry
+		{
+			both mp_pistol_carry_stand_2_walk_b
+			aim run_pistol_F_aims
+		}
+		strafing left
+		{
+			both mp_stand_2_walk_l
+			aim run_rifle_L_aims
+		}
+		strafing right
+		{
+			both mp_stand_2_walk_r
+			aim run_rifle_R_aims
+		}
+		default
+		{
+			both mp_stand_2_walk_b
+			aim run_rifle_F_aims
+		}
+		
+		transitions
+		{
+			moveType walkbk
+			{
+				ignore
+			}
+			moveType walk
+			{
+				goto idle2walk
+			}
+			moveType run
+			{
+				goto idle2run
+			}
+			moveType runbk
+			{
+				goto idle2runbk
+			}
+			moveType sprint
+			{
+				goto idle2sprint
+			}
+			moveType walkcr, runcr
+			{
+				goto idlecr2walkcr
+			}
+			moveType walkcrbk, runcrbk
+			{
+				goto idlecr2walkcrbk
+			}
+			moveType idle
+			{
+				goto walkbk2idle
+			}
+			anim_complete
+			{
+				goto walkbk
+			}
+		}
+	}
+	
+	idle2run sync stand2move_group
+	{
+		playerAnimType lobby, strafing left
+		{
+			both mp_unarmed_stand_2_run_l
+			aim run_unarmed_L_aims
+		}
+		playerAnimType lobby, strafing right
+		{
+			both mp_unarmed_stand_2_run_r
+			aim run_unarmed_R_aims
+		}
+		playerAnimType lobby
+		{
+			both mp_unarmed_stand_2_run_f
+			aim run_unarmed_F_aims
+		}
+		playerAnimTypePrimary rocketlauncher, strafing left
+		{
+			both mp_rpg_stand_2_run_l
+			aim run_rocket_L_aims
+		}
+		playerAnimTypePrimary rocketlauncher, strafing right
+		{
+			both mp_rpg_stand_2_run_r
+			aim run_rocket_R_aims
+		}
+		playerAnimTypePrimary rocketlauncher
+		{
+			both mp_rpg_stand_2_run_f
+			aim run_rocket_F_aims
+		}
+		ball_carrier, strafing left
+		{
+			both mp_uplink_stand_2_run_l
+			aim run_uplink_ball_L_aims
+		}
+		ball_carrier, strafing right
+		{
+			both mp_uplink_stand_2_run_r
+			aim run_uplink_ball_R_aims
+		}
+		ball_carrier
+		{
+			both mp_uplink_stand_2_run_f
+			aim run_uplink_ball_F_aims
+		}
+		playerAnimTypePrimary carepackage, strafing left
+		{
+			both mp_carepackage_stand_2_stand_run_l
+			speed_scaled_transition 0.6
+			aim run_combatknife_L_aims
+		}
+		playerAnimTypePrimary carepackage, strafing right
+		{
+			both mp_carepackage_stand_2_stand_run_r
+			speed_scaled_transition 0.6
+			aim run_combatknife_R_aims
+		}
+		playerAnimType carepackage
+		{
+			both mp_carepackage_stand_2_stand_run_f
+			speed_scaled_transition 0.6
+			aim run_combatknife_F_aims
+		}
+		playerAnimTypePrimary combatknife AND shovel, strafing left
+		{
+			both mp_jug_maniac_stand_2_run_l
+			speed_scaled_transition 0.6
+			aim run_combatknife_L_aims
+		}
+		playerAnimTypePrimary combatknife AND shovel, strafing right
+		{
+			both mp_jug_maniac_stand_2_run_r
+			speed_scaled_transition 0.6
+			aim run_combatknife_R_aims
+		}
+		playerAnimTypePrimary combatknife AND shovel
+		{
+			both mp_jug_maniac_stand_2_run_f
+			speed_scaled_transition 0.6
+			aim run_combatknife_F_aims
+		}
+		playerAnimTypePrimary twohandedmelee, strafing left
+		{
+			both mp_sword_stand_2_stand_run_l
+			aim run_sword_L_aims
+		}
+		playerAnimTypePrimary twohandedmelee, strafing right
+		{
+			both mp_sword_stand_2_stand_run_r
+			aim run_sword_R_aims
+		}
+		playerAnimTypePrimary twohandedmelee
+		{
+			both mp_sword_stand_2_stand_run_f
+			aim run_sword_F_aims
+		}
+		playerAnimTypePrimary riotshield, strafing left
+		{
+			both mp_shield_stand_2_stand_run_l
+			aim run_shield_L_aims
+		}
+		playerAnimTypePrimary riotshield, strafing right
+		{
+			both mp_shield_stand_2_stand_run_r
+			aim run_shield_R_aims
+		}
+		playerAnimTypePrimary riotshield
+		{
+			both mp_shield_stand_2_stand_run_f
+			aim run_shield_F_aims
+		}
+		weaponClass beam, strafing left
+		{
+			both mp_lmg_stand_2_run_left
+		}
+		weaponClass beam, strafing right
+		{
+			both mp_lmg_stand_2_run_right
+		}
+		weaponClass beam
+		{
+			both mp_lmg_stand_2_run_forward
+		}
+		akimbo, strafing left
+		{
+			both mp_akimbo_stand_2_run_l
+			aim run_akimbo_L_aims
+		}
+		akimbo, strafing right
+		{
+			both mp_akimbo_stand_2_run_r
+			aim run_akimbo_R_aims
+		}
+		akimbo
+		{
+			both mp_akimbo_stand_2_run_f
+			aim run_akimbo_F_aims
+		}
+		playerAnimTypePrimary pistol, strafing left, weaponAttachment tactical_knife
+		{
+			both mp_tacknife_stand_2_stand_run_l
+			aim run_pistol_L_aims
+		}
+		playerAnimTypePrimary pistol, strafing right, weaponAttachment tactical_knife
+		{
+			both mp_tacknife_stand_2_stand_run_r
+			aim run_pistol_R_aims
+		}
+		playerAnimTypePrimary pistol, weaponAttachment tactical_knife
+		{
+			both mp_tacknife_stand_2_stand_run_f
+			aim run_pistol_F_aims
+		}
+		playerAnimTypePrimary pistol, strafing left
+		{
+			both mp_pistol_stand_2_run_l
+			aim run_pistol_L_aims
+		}
+		playerAnimTypePrimary pistol, strafing right
+		{
+			both mp_pistol_stand_2_run_r
+			aim run_pistol_R_aims
+		}
+		playerAnimTypePrimary pistol
+		{
+			both mp_pistol_stand_2_run_f
+			aim run_pistol_F_aims
+		}
+		playerAnimTypePrimary pistolcarry, strafing left
+		{
+			both mp_pistol_carry_stand_2_run_l
+			aim run_pistol_L_aims
+		}
+		playerAnimTypePrimary pistolcarry, strafing right
+		{
+			both mp_pistol_carry_stand_2_run_r
+			aim run_pistol_R_aims
+		}
+		playerAnimTypePrimary pistolcarry
+		{
+			both mp_pistol_carry_stand_2_run_f
+			aim run_pistol_F_aims
+		}
+		weaponclass spread, strafing left
+		{
+			both mp_shotgun_stand_2_run_left
+			aim run_rifle_L_aims
+		}
+		weaponclass spread, strafing right
+		{
+			both mp_shotgun_stand_2_run_right
+			aim run_rifle_R_aims
+		}
+		weaponclass spread
+		{
+			both mp_shotgun_stand_2_run_forward
+			aim run_rifle_F_aims
+		}
+		playerAnimTypePrimary sniper, strafing left
+		{
+			both mp_sniper_stand_2_run_left
+			aim run_rifle_L_aims
+		}
+		playerAnimTypePrimary sniper, strafing right
+		{
+			both mp_sniper_stand_2_run_right
+			aim run_rifle_R_aims
+		}
+		playerAnimTypePrimary sniper
+		{
+			both mp_sniper_stand_2_run_forward
+			aim run_rifle_F_aims
+		}
+		playerAnimTypePrimary autorifle, weaponclass mg, strafing left
+		{
+			both mp_lmg_stand_2_run_left
+			aim run_rifle_L_aims
+		}
+		playerAnimTypePrimary autorifle, weaponclass mg, strafing right
+		{
+			both mp_lmg_stand_2_run_right
+			aim run_rifle_R_aims
+		}
+		playerAnimTypePrimary autorifle, weaponclass mg
+		{
+			both mp_lmg_stand_2_run_forward
+			aim run_rifle_F_aims
+		}
+		playerAnimTypePrimary smg, strafing left
+		{
+			both mp_smg_stand_2_stand_run_l
+			speed_scaled_transition 0.55
+			aim run_rifle_L_aims
+		}
+		playerAnimTypePrimary smg, strafing right
+		{
+			both mp_smg_stand_2_stand_run_r
+			speed_scaled_transition 0.5
+			aim run_rifle_R_aims
+		}
+		playerAnimTypePrimary smg
+		{
+			both mp_smg_stand_2_stand_run_f
+			speed_scaled_transition 0.7
+			aim run_rifle_F_aims
+		}
+		strafing left
+		{
+			both mp_assault_stand_2_run_left
+			aim run_rifle_L_aims
+		}
+		strafing right
+		{
+			both mp_assault_stand_2_run_right
+			aim run_rifle_R_aims
+		}
+		default
+		{
+			both mp_stand_2_run
+			aim run_rifle_F_aims
+		}
+		
+		transitions
+		{
+			moveType run
+			{
+				ignore
+			}
+			moveType runbk
+			{
+				goto idle2runbk
+			}
+			moveType walk
+			{
+				goto idle2walk
+			}
+			moveType sprint
+			{
+				goto idle2sprint
+			}
+			moveType walkcr, runcr
+			{
+				goto idlecr2walkcr
+			}
+			moveType walkcrbk, runcrbk
+			{
+				goto idlecr2walkcrbk
+			}
+			moveType idle
+			{
+				goto walk2idle
+			}
+			anim_complete
+			{
+				goto run
+			}
+		}
+	}
+	idle2runbk sync stand2move_group
+	{
+		playerAnimType lobby, strafing left
+		{
+			both mp_unarmed_stand_2_run_l
+			aim run_unarmed_L_aims
+		}
+		playerAnimType lobby, strafing right
+		{
+			both mp_unarmed_stand_2_run_r
+			aim run_unarmed_R_aims
+		}
+		playerAnimType lobby
+		{
+			both mp_unarmed_stand_2_run_b
+			aim run_unarmed_F_aims
+		}
+		playerAnimTypePrimary rocketlauncher, strafing left
+		{
+			both mp_rpg_stand_2_run_l
+			aim run_rocket_L_aims
+		}
+		playerAnimTypePrimary rocketlauncher, strafing right
+		{
+			both mp_rpg_stand_2_run_r
+			aim run_rocket_R_aims
+		}
+		playerAnimTypePrimary rocketlauncher
+		{
+			both mp_rpg_stand_2_run_b
+			aim run_rocket_F_aims
+		}
+		ball_carrier, strafing left
+		{
+			both mp_uplink_stand_2_run_l
+			aim run_uplink_ball_L_aims
+		}
+		ball_carrier, strafing right
+		{
+			both mp_uplink_stand_2_run_r
+			aim run_uplink_ball_R_aims
+		}
+		ball_carrier
+		{
+			both mp_uplink_stand_2_run_b
+			aim run_uplink_ball_F_aims
+		}
+		playerAnimTypePrimary carepackage, strafing left
+		{
+			both mp_carepackage_stand_2_stand_run_l
+			aim run_combatknife_L_aims
+		}
+		playerAnimTypePrimary carepackage, strafing right
+		{
+			both mp_carepackage_stand_2_stand_run_r
+			aim run_combatknife_R_aims
+		}
+		playerAnimType carepackage
+		{
+			both mp_carepackage_stand_2_stand_run_b
+			speed_scaled_transition
+			aim run_combatknife_F_aims
+		}
+		playerAnimTypePrimary combatknife AND shovel, strafing left
+		{
+			both mp_jug_maniac_stand_2_run_l
+			aim run_combatknife_L_aims
+		}
+		playerAnimTypePrimary combatknife AND shovel, strafing right
+		{
+			both mp_jug_maniac_stand_2_run_r
+			aim run_combatknife_R_aims
+		}
+		playerAnimTypePrimary combatknife AND shovel
+		{
+			both mp_jug_maniac_stand_2_run_b
+			speed_scaled_transition
+			aim run_combatknife_F_aims
+		}
+		playerAnimTypePrimary twohandedmelee, strafing left
+		{
+			both mp_sword_stand_2_stand_run_l
+			aim run_sword_L_aims
+		}
+		playerAnimTypePrimary twohandedmelee, strafing right
+		{
+			both mp_sword_stand_2_stand_run_r
+			aim run_sword_R_aims
+		}
+		playerAnimTypePrimary twohandedmelee
+		{
+			both mp_sword_stand_2_stand_run_b
+			aim run_sword_F_aims
+		}
+		playerAnimTypePrimary riotshield, strafing left
+		{
+			both mp_shield_stand_2_stand_run_l
+			aim run_shield_L_aims
+		}
+		playerAnimTypePrimary riotshield, strafing right
+		{
+			both mp_shield_stand_2_stand_run_r
+			aim run_shield_R_aims
+		}
+		playerAnimTypePrimary riotshield
+		{
+			both mp_shield_stand_2_stand_run_b
+			aim run_shield_F_aims
+		}
+		akimbo, strafing left
+		{
+			both mp_akimbo_stand_2_run_l
+			aim run_akimbo_L_aims
+		}
+		akimbo, strafing right
+		{
+			both mp_akimbo_stand_2_run_r
+			aim run_akimbo_R_aims
+		}
+		akimbo
+		{
+			both mp_akimbo_stand_2_run_b
+			aim run_akimbo_F_aims
+		}
+		playerAnimTypePrimary pistol, strafing left, weaponAttachment tactical_knife
+		{
+			both mp_tacknife_stand_2_stand_run_l
+			aim run_pistol_L_aims
+		}
+		playerAnimTypePrimary pistol, strafing right, weaponAttachment tactical_knife
+		{
+			both mp_tacknife_stand_2_stand_run_r
+			aim run_pistol_R_aims
+		}
+		playerAnimTypePrimary pistol, weaponAttachment tactical_knife
+		{
+			both mp_tacknife_stand_2_stand_run_b
+			aim run_pistol_F_aims
+		}
+		playerAnimTypePrimary pistol, strafing left
+		{
+			both mp_pistol_stand_2_run_l
+			aim run_pistol_L_aims
+		}
+		playerAnimTypePrimary pistol, strafing right
+		{
+			both mp_pistol_stand_2_run_r
+			aim run_pistol_R_aims
+		}
+		playerAnimTypePrimary pistol
+		{
+			both mp_pistol_stand_2_run_b
+			aim run_pistol_F_aims
+		}
+		playerAnimTypePrimary pistolcarry, strafing left
+		{
+			both mp_pistol_carry_stand_2_run_l
+			aim run_pistol_L_aims
+		}
+		playerAnimTypePrimary pistolcarry, strafing right
+		{
+			both mp_pistol_carry_stand_2_run_r
+			aim run_pistol_R_aims
+		}
+		playerAnimTypePrimary pistolcarry
+		{
+			both mp_pistol_carry_stand_2_run_b
+			aim run_pistol_F_aims
+		}		
+		weaponclass spread, strafing left
+		{
+			both mp_shotgun_stand_2_run_left
+			aim run_rifle_L_aims
+		}
+		weaponclass spread, strafing right
+		{
+			both mp_shotgun_stand_2_run_right
+			aim run_rifle_R_aims
+		}
+		weaponclass spread
+		{
+			both mp_shotgun_stand_2_run_back
+			aim run_rifle_F_aims
+		}
+		playerAnimTypePrimary sniper, strafing left
+		{
+			both mp_sniper_stand_2_run_left
+			aim run_rifle_L_aims
+		}
+		playerAnimTypePrimary sniper, strafing right
+		{
+			both mp_sniper_stand_2_run_right
+			aim run_rifle_R_aims
+		}
+		playerAnimTypePrimary sniper
+		{
+			both mp_sniper_stand_2_run_back
+			aim run_rifle_F_aims
+		}
+		playerAnimTypePrimary autorifle, weaponclass mg, strafing left
+		{
+			both mp_lmg_stand_2_run_left
+			aim run_rifle_L_aims
+		}
+		playerAnimTypePrimary autorifle, weaponclass mg, strafing right
+		{
+			both mp_lmg_stand_2_run_right
+			aim run_rifle_R_aims
+		}
+		playerAnimTypePrimary autorifle, weaponclass mg
+		{
+			both mp_lmg_stand_2_run_back
+			aim run_rifle_F_aims
+		}
+		playerAnimTypePrimary smg, strafing left
+		{
+			both mp_smg_stand_2_stand_run_l
+			aim run_rifle_L_aims
+		}
+		playerAnimTypePrimary smg, strafing right
+		{
+			both mp_smg_stand_2_stand_run_r
+			aim run_rifle_R_aims
+		}
+		playerAnimTypePrimary smg
+		{
+			both mp_smg_stand_2_stand_run_b
+			speed_scaled_transition 0.65
+			aim run_rifle_F_aims
+		}
+		strafing left
+		{
+			both mp_assault_stand_2_run_left
+			aim run_rifle_L_aims
+		}
+		strafing right
+		{
+			both mp_assault_stand_2_run_right
+			aim run_rifle_R_aims
+		}
+		default
+		{
+			both mp_assault_stand_2_run_back
+			aim run_rifle_F_aims
+		}
+		
+		transitions
+		{
+			moveType runbk
+			{
+				ignore
+			}
+			moveType run
+			{
+				goto idle2run
+			}
+			moveType walk
+			{
+				goto idle2walk
+			}			
+			moveType walkbk
+			{
+				goto idle2walkbk
+			}			
+			moveType sprint
+			{
+				goto idle2sprint
+			}
+			moveType walkcr, runcr
+			{
+				goto idlecr2walkcr
+			}
+			moveType walkcrbk, runcrbk
+			{
+				goto idlecr2walkcrbk
+			}
+			moveType idle
+			{
+				goto walkbk2idle
+			}
+			anim_complete
+			{
+				goto runbk
+			}
+		}
+	}
+	
+	idle2sprint sync stand2move_group, no_pitch_aiming
+	{
+		ball_carrier
+		{
+			both mp_uplink_stand_2_sprint
+			aim run_uplink_ball_F_aims
+			blendtime 35
+		}
+		playerAnimType carepackage
+		{
+			both mp_carepackage_stand_2_stand_sprint
+			aim run_combatknife_F_aims
+			blendtime 35
+		}
+		playerAnimTypePrimary combatknife AND shovel
+		{
+			both mp_jug_maniac_stand_2_sprint
+			aim run_combatknife_F_aims
+			blendtime 35
+		}
+		playerAnimTypePrimary twohandedmelee
+		{
+			both mp_sword_stand_2_stand_sprint
+			aim run_sword_F_aims
+			blendtime 35
+		}
+		playerAnimTypePrimary riotshield, sprintMeleeCharge
+		{
+		}
+		playerAnimTypePrimary riotshield, gungho
+		{
+			both mp_shield_stand_2_stand_run_f
+			aim run_shield_F_aims
+			blendtime 35
+		}
+		playerAnimTypePrimary riotshield
+		{
+			both mp_shield_stand_2_stand_sprint
+			aim run_shield_F_aims
+			blendtime 35
+		}
+		playerAnimType lobby
+		{
+			both mp_unarmed_stand_2_sprint
+			aim run_unarmed_F_aims
+			blendtime 35
+		}
+		playerAnimTypePrimary rocketlauncher
+		{
+			both mp_rpg_stand_2_sprint
+			aim run_rocket_F_aims
+			blendtime 35
+		}
+		akimbo, gungho
+		{
+			both mp_akimbo_stand_2_stand_sprint_gungho
+			aim run_akimbo_F_aims
+			blendtime 35
+		}
+		akimbo
+		{
+			both mp_akimbo_stand_2_sprint_f
+			aim run_akimbo_F_aims
+			blendtime 35
+		}
+		playerAnimTypePrimary pistol, gungho, weaponAttachment tactical_knife
+		{
+			both mp_tacknife_stand_2_stand_sprint_gungho
+			aim run_pistol_F_aims
+			blendtime 35
+		}
+		playerAnimTypePrimary pistol, weaponAttachment tactical_knife
+		{
+			both mp_tacknife_stand_2_stand_sprint
+			aim run_pistol_F_aims
+			blendtime 35
+		}
+		playerAnimTypePrimary pistol, gungho
+		{
+			both mp_pistol_stand_2_stand_sprint_gungho
+			aim run_pistol_F_aims
+			blendtime 35
+		}
+		playerAnimTypePrimary pistol
+		{
+			both mp_pistol_stand_2_sprint_f
+			aim run_pistol_F_aims
+			blendtime 35
+		}
+		playerAnimTypePrimary pistolcarry
+		{
+			both mp_pistol_carry_stand_2_sprint
+			aim run_pistol_F_aims
+			blendtime 35
+		}
+		playerAnimType smg, gungho
+		{
+			both mp_core_stand_2_sprint_gungho
+			aim run_rifle_F_aims
+			blendtime 35
+		}
+		playerAnimType smg
+		{
+			both mp_smg_stand_2_sprint
+			aim run_rifle_F_aims
+			blendtime 35
+		}
+		playerAnimType sniper, gungho
+		{
+			both mp_core_stand_2_sprint_gungho
+			aim run_rifle_F_aims
+			blendtime 35
+		}
+		playerAnimType sniper
+		{
+			both mp_sniper_stand_2_sprint
+			aim run_rifle_F_aims
+			blendtime 35
+		}
+		weaponAttachment bayonet, sprintMeleeCharge
+		{
+			both mp_core_stand_2_sprint_bayonet
+			aim run_rifle_F_aims
+			blendtime 35
+		}
+		gungho
+		{
+			both mp_core_stand_2_sprint_gungho
+			aim run_rifle_F_aims
+			blendtime 35
+		}
+		default
+		{
+			both mp_stand_2_sprint
+			aim run_rifle_F_aims
+			blendtime 35
+		}
+		
+		transitions
+		{
+			moveType sprint
+			{
+				ignore
+			}
+			anim_complete
+			{
+				goto sprint
+			}
+		}
+	}
+	idlecr
+	{
+		swimming
+		{
+			face mp_s2_facial_bs_idle
+			both mp_swimming_idle
+			aim idle_combatknife_aims
+		}
+		mounted plant
+		{
+			face mp_s2_facial_bs_idle
+			both nonproneSAWgunner_aim turretanim
+		}
+		mounted mg42
+		{
+			face mp_s2_facial_bs_idle
+			both crouchSAWgunner_aim turretanim
+		}
+		mounted remote
+		{
+			face mp_s2_facial_bs_idle
+			both pb_crouch_tablet
+		}
+		playerAnimType bangalore
+		{
+			face mp_s2_facial_bs_idle
+			both mp_tool_bangalore_crouch_idle notbaseidle
+		}
+		playerAnimType tntbundle
+		{
+			face mp_s2_facial_bs_idle
+			both mp_tool_tntbundle_crouch_idle notbaseidle
+		}
+		playerAnimType briefcase
+		{
+			face mp_s2_facial_bs_idle
+			both mp_srchdstry_crouch_bomb_idle notbaseidle
+		}
+		playerAnimType hammer
+		{
+			face mp_s2_facial_bs_idle
+			both mp_tool_crouch_hammer_loop notbaseidle
+		}
+		playerAnimType wrench
+		{
+			face mp_s2_facial_bs_idle
+			both mp_tool_crouch_wrench_loop notbaseidle
+		}
+		playerAnimType genericuse
+		{
+			face mp_s2_facial_bs_idle
+			both mp_raids_generic_crouch_use_idle notbaseidle
+		}
+		playerAnimType laptop
+		{
+			face mp_s2_facial_bs_idle
+			both pb_crouch_tablet
+		}
+		playerAnimTypePrimary lobby
+		{
+			face mp_s2_facial_bs_idle
+			both mp_unarmed_crouch_idle
+			aim crouch_unarmed_aims
+			turns
+			{
+				turnleft mp_jug_maniac_crouch_turn_l aim crouch_combatknife_aims
+				turnright mp_jug_maniac_crouch_turn_r aim crouch_combatknife_aims
+			}
+			twitches
+			{
+				mp_unarmed_crouch_idle aim crouch_unarmed_aims
+			}
+		}
+		akimbo
+		{
+			face mp_s2_facial_bs_idle
+			both mp_akimbo_crouch_idle
+			aim crouch_akimbo_aims
+			turns
+			{
+				turnleft mp_akimbo_crouch_aim_turn_l aim crouch_akimbo_aims
+				turnright mp_akimbo_crouch_aim_turn_r aim crouch_akimbo_aims
+			}
+			twitches
+			{
+				mp_akimbo_crouch_twitch_a aim crouch_akimbo_aims
+				mp_akimbo_crouch_twitch_b aim crouch_akimbo_aims
+				mp_akimbo_crouch_twitch_c aim crouch_akimbo_aims
+				mp_akimbo_crouch_twitch_d aim crouch_akimbo_aims
+			}
+		}
+		playerAnimTypePrimary pistol, weapon_position ads, weaponAttachment tactical_knife
+		{
+			face mp_s2_facial_bs_idle
+			both mp_tacknife_crouch_idle_copy
+			aim crouch_pistol_aims
+			
+			turns
+			{
+				turnleft mp_tacknife_crouch_aim_turn_left aim crouch_pistol_aims
+				turnright mp_tacknife_crouch_aim_turn_right aim crouch_pistol_aims
+			}
+		}
+		playerAnimTypePrimary pistol, weaponAttachment tactical_knife
+		{
+			face mp_s2_facial_bs_idle
+			both mp_tacknife_crouch_idle
+			aim crouch_pistol_aims
+			
+			turns
+			{
+				turnleft mp_tacknife_crouch_aim_turn_left aim crouch_pistol_aims
+				turnright mp_tacknife_crouch_aim_turn_right aim crouch_pistol_aims
+			}
+			twitches
+			{
+				mp_tacknife_crouch_twitch_a aim crouch_pistol_aims
+				mp_tacknife_crouch_twitch_b aim crouch_pistol_aims
+				mp_tacknife_crouch_twitch_c aim crouch_pistol_aims
+				mp_tacknife_crouch_twitch_d aim crouch_pistol_aims
+				mp_tacknife_crouch_twitch_e aim crouch_pistol_aims
+			}
+		}
+		playerAnimTypePrimary pistol, weapon_position ads
+		{
+			face mp_s2_facial_bs_idle
+			both mp_pistol_crouch_idle_copy
+			aim crouch_pistol_aims
+			
+			turns
+			{
+				turnleft mp_pistol_crouch_aim_turn_l aim crouch_pistol_aims
+				turnright mp_pistol_crouch_aim_turn_r aim crouch_pistol_aims
+			}
+		}
+		playerAnimTypePrimary pistol
+		{
+			face mp_s2_facial_bs_idle
+			both mp_pistol_crouch_idle
+			aim crouch_pistol_aims
+			
+			turns
+			{
+				turnleft mp_pistol_crouch_aim_turn_l aim crouch_pistol_aims
+				turnright mp_pistol_crouch_aim_turn_r aim crouch_pistol_aims
+			}
+			twitches
+			{
+				mp_pistol_crouch_twitch_a aim crouch_pistol_aims
+				mp_pistol_crouch_twitch_b aim crouch_pistol_aims
+				mp_pistol_crouch_twitch_c aim crouch_pistol_aims
+				mp_pistol_crouch_twitch_d aim crouch_pistol_aims
+				mp_pistol_crouch_twitch_e aim crouch_pistol_aims
+			}
+		}
+		playerAnimTypePrimary pistolcarry, weapon_position ads
+		{
+			face mp_s2_facial_bs_idle
+			both mp_pistol_carry_crouch_idle_ads
+			aim crouch_pistol_aims
+			
+			turns
+			{
+				turnleft mp_pistol_carry_crouch_turn_l aim crouch_pistol_aims
+				turnright mp_pistol_carry_crouch_turn_r aim crouch_pistol_aims
+			}
+		}
+		playerAnimTypePrimary pistolcarry
+		{
+			face mp_s2_facial_bs_idle
+			both mp_pistol_carry_crouch_idle
+			aim crouch_pistol_aims
+			
+			turns
+			{
+				turnleft mp_pistol_carry_crouch_turn_l aim crouch_pistol_aims
+				turnright mp_pistol_carry_crouch_turn_r aim crouch_pistol_aims
+			}
+			twitches
+			{
+				mp_pistol_carry_crouch_twitch_a
+				mp_pistol_carry_crouch_twitch_b
+			}
+		}
+		ball_carrier
+		{
+			face mp_s2_facial_bs_idle
+			both mp_uplink_crouch_idle
+			aim crouch_uplink_ball_aims
+			turns
+			{
+				turnleft mp_uplink_crouch_turn_l aim crouch_uplink_ball_aims
+				turnright mp_uplink_crouch_turn_r aim crouch_uplink_ball_aims
+			}
+			twitches
+			{
+				mp_uplink_crouch_idle_twitch_a aim crouch_uplink_ball_aims
+				mp_uplink_crouch_idle_twitch_b aim crouch_uplink_ball_aims
+			}
+		}
+		playerAnimTypePrimary carepackage
+		{
+			face mp_s2_facial_bs_idle
+			both mp_carepackage_crouch_idle
+			aim crouch_combatknife_aims
+			turns
+			{
+				turnleft mp_carepackage_crouch_turn_l aim crouch_combatknife_aims
+				turnright mp_carepackage_crouch_turn_r aim crouch_combatknife_aims
+			}
+			twitches
+			{
+				mp_carepackage_crouch_idle_twitch_a aim crouch_combatknife_aims
+				mp_carepackage_crouch_idle_twitch_b aim crouch_combatknife_aims
+				mp_carepackage_crouch_idle_twitch_c aim crouch_combatknife_aims
+				mp_carepackage_crouch_idle_twitch_d aim crouch_combatknife_aims
+				mp_carepackage_crouch_idle_twitch_e aim crouch_combatknife_aims
+			}
+		}
+		playerAnimTypePrimary combatknife AND shovel
+		{
+			face mp_s2_facial_bs_idle
+			both mp_jug_maniac_crouch_idle
+			aim crouch_combatknife_aims
+			turns
+			{
+				turnleft mp_jug_maniac_crouch_turn_l aim crouch_combatknife_aims
+				turnright mp_jug_maniac_crouch_turn_r aim crouch_combatknife_aims
+			}
+			twitches
+			{
+				mp_jug_maniac_crouch_twitch_a aim crouch_combatknife_aims
+				mp_jug_maniac_crouch_twitch_b aim crouch_combatknife_aims
+				mp_jug_maniac_crouch_twitch_c aim crouch_combatknife_aims
+				mp_jug_maniac_crouch_twitch_d aim crouch_combatknife_aims
+				mp_jug_maniac_crouch_twitch_e aim crouch_combatknife_aims
+			}
+		}
+		playerAnimTypePrimary twohandedmelee
+		{
+			face mp_s2_facial_bs_idle
+			both mp_sword_crouch_idle
+			aim crouch_sword_aims
+			turns
+			{
+				turnleft mp_sword_crouch_aim_turn_left aim crouch_sword_aims
+				turnright mp_sword_crouch_aim_turn_right aim crouch_sword_aims
+			}
+			twitches
+			{
+				mp_sword_crouch_twitch_a aim crouch_sword_aims
+				mp_sword_crouch_twitch_b aim crouch_sword_aims
+				mp_sword_crouch_twitch_c aim crouch_sword_aims
+				mp_sword_crouch_twitch_d aim crouch_sword_aims
+			}
+		}
+		playerAnimTypePrimary riotshield
+		{
+			face mp_s2_facial_bs_idle
+			both mp_shield_crouch_idle
+			aim crouch_shield_aims
+			turns
+			{
+				turnleft mp_shield_crouch_aim_turn_left aim crouch_shield_aims
+				turnright mp_shield_crouch_aim_turn_right aim crouch_shield_aims
+			}
+			twitches
+			{
+				mp_shield_crouch_twitch_a aim crouch_shield_aims
+				mp_shield_crouch_twitch_b aim crouch_shield_aims
+				mp_shield_crouch_twitch_c aim crouch_shield_aims
+			}
+		}
+	  	playerAnimTypePrimary rocketlauncher, weapon_position ads
+  		{
+			face mp_s2_facial_bs_idle
+   			both mp_rpg_crouch_ads_idle
+   			aim crouch_ads_rocket_aims
+   			turns
+			{
+				turnleft mp_rpg_crouch_ads_turn_l aim crouch_ads_rocket_aims
+				turnright mp_rpg_crouch_ads_turn_r aim crouch_ads_rocket_aims
+			}
+  		}
+  		playerAnimTypePrimary rocketlauncher
+  		{
+			face mp_s2_facial_bs_idle
+   			both mp_rpg_crouch_idle
+   			aim crouch_rocket_aims
+   			turns
+			{
+				turnleft mp_rpg_crouch_turn_l aim crouch_rocket_aims
+				turnright mp_rpg_crouch_turn_r aim crouch_rocket_aims
+			}
+ 			twitches
+			{
+				mp_rpg_crouch_twitch1 aim crouch_rocket_aims
+				mp_rpg_crouch_twitch2 aim crouch_rocket_aims
+				mp_rpg_crouch_twitch3 aim crouch_rocket_aims
+			}
+  		}
+		weapon_position ads
+		{
+			face mp_s2_facial_bs_idle
+			both mp_crouch_idle_ads
+			aim crouch_rifle_aims
+			turns
+			{
+				turnleft mp_crouch_aim_turn_l aim crouch_rifle_aims
+				turnright mp_crouch_aim_turn_r aim crouch_rifle_aims
+			}
+		}
+		default
+		{
+			face mp_s2_facial_bs_idle
+			both mp_crouch_idle
+			aim crouch_rifle_aims
+			turns
+			{
+				turnleft mp_crouch_aim_turn_l aim crouch_rifle_aims
+				turnright mp_crouch_aim_turn_r aim crouch_rifle_aims
+			}
+			twitches
+			{
+				mp_crouch_twitch_a aim crouch_rifle_aims
+				mp_crouch_twitch_b aim crouch_rifle_aims
+				mp_crouch_twitch_c aim crouch_rifle_aims
+				mp_crouch_twitch_d aim crouch_rifle_aims
+				mp_crouch_twitch_e aim crouch_rifle_aims
+			}
+		}
+		
+		transitions
+		{
+			moveType runcr, walkcr
+			{
+				goto idlecr2walkcr
+			}
+			moveType runcrbk, walkcrbk
+			{
+				goto idlecr2walkcrbk
+			}
+			moveType run
+			{
+				goto idle2run
+			}
+			moveType walk
+			{
+				goto idle2walk
+			}
+			moveType runbk
+			{
+				goto idle2runbk
+			}
+			moveType sprint
+			{
+				goto idlecr2sprint
+			}
+			moveType walkprone
+			{
+				goto idlecr2idleprone
+			}
+			moveType idleprone
+			{
+				goto idlecr2idleprone
+			}
+			moveType idle
+			{
+				goto idlecr2idle
+			}
+		}
+	}
+	idlecr2idle sync crouch2stand_group
+	{
+		weaponclass autofire AND spread
+		{
+			both mp_smg_crouch_2_stand
+			idle_transition
+			aim idle_rifle_aims
+		}
+		playerAnimType lobby
+		{
+			both mp_unarmed_crouch_2_stand
+			aim idle_unarmed_aims
+		}
+		ball_carrier
+		{
+			both mp_uplink_crouch_2_stand
+			aim idle_uplink_ball_aim
+		}
+		playerAnimType carepackage
+		{
+			both mp_carepackage_crouch_2_stand
+			aim idle_combatknife_aims
+		}
+		playerAnimTypePrimary combatknife AND shovel
+		{
+			both mp_jug_maniac_crouch_2_stand
+			aim idle_combatknife_aims
+		}
+		playerAnimTypePrimary twohandedmelee
+		{
+			both mp_sword_crouch_2_stand
+			aim idle_sword_aims
+		}
+		playerAnimTypePrimary riotshield
+		{
+			both mp_shield_crouch_2_stand
+			aim idle_shield_aims
+		}
+		playerAnimTypePrimary rocketlauncher
+		{
+			both mp_rpg_crouch_2_stand
+			idle_transition
+			aim idle_rocket_aims
+		}
+		akimbo
+		{
+			both mp_akimbo_crouch_2_stand
+			idle_transition
+			aim idle_akimbo_aims
+		}
+		playerAnimTypePrimary pistol, weaponAttachment tactical_knife
+		{
+			both mp_tacknife_crouch_2_stand
+			idle_transition
+			aim idle_pistol_aims
+		}
+		playerAnimTypePrimary pistol
+		{
+			both mp_pistol_crouch_2_stand
+			idle_transition
+			aim idle_pistol_aims
+		}
+		playerAnimTypePrimary pistolcarry
+		{
+			both mp_pistol_carry_crouch_2_stand
+			idle_transition
+			aim idle_pistol_aims
+		}
+		playerAnimType hammer
+		{
+			both mp_tool_hammer_crouch_2_stand
+			idle_transition
+		}		
+		playerAnimType wrench
+		{
+			both mp_tool_wrench_crouch_2_stand
+			idle_transition
+		}
+		playerAnimType genericuse
+		{
+			both mp_raids_generic_crouch_2_stand_use
+			idle_transition
+		}
+		default
+		{
+			both mp_crouch_2_stand aim idle_rifle_aims
+		}
+		
+		transitions
+		{
+			moveType idle
+			{
+				ignore
+			}
+			moveType run
+			{
+				goto idle2run
+			}
+			moveType walk
+			{
+				goto idle2walk
+			}
+			moveType runbk
+			{
+				goto idle2runbk
+			}
+			moveType sprint
+			{
+				goto idle2sprint
+			}
+			moveType idlecr
+			{
+				goto idle2idlecr
+			}
+			anim_complete
+			{
+				goto idle
+			}
+		}
+	}
+	idlecr2idleprone sync crouch2prone_group, prone_transition
+	{
+		playerAnimTypePrimary rocketlauncher
+		{
+			both mp_rpg_crouch_2_prone
+		}
+		ball_carrier
+		{
+			both mp_uplink_crouch_2_prone
+		}
+		playerAnimType carepackage
+		{
+			both mp_carepackage_crouch_2_prone
+		}
+		playerAnimTypePrimary combatknife AND shovel
+		{
+			both mp_jug_maniac_crouch_2_prone
+		}
+		playerAnimTypePrimary twohandedmelee
+		{
+			both mp_sword_crouch_2_prone
+		}
+		akimbo
+		{
+			both mp_akimbo_crouch_2_prone
+		}
+		playerAnimTypePrimary pistol, weaponAttachment tactical_knife
+		{
+			both mp_tacknife_crouch_2_prone
+		}
+		playerAnimTypePrimary pistol
+		{
+			both mp_pistol_crouch_2_prone
+		}
+		playerAnimTypePrimary pistolcarry
+		{
+			both mp_pistol_carry_crouch_2_prone
+		}
+		playerAnimType hammer
+		{
+			both mp_tool_hammer_crouch_2_prone
+		}
+		playerAnimType wrench
+		{
+			both mp_tool_wrench_crouch_2_prone
+		}
+		playerAnimType genericuse
+		{
+			both mp_raids_generic_crouch_2_prone_use
+		}
+		default
+		{
+			both mp_crouch_2_prone
+		}
+		
+		transitions
+		{
+			moveType idleprone, walkprone
+			{
+				ignore
+			}
+			moveType idlecr
+			{
+				goto idleprone2idlecr
+			}
+			moveType idle
+			{
+				goto idleprone2idle
+			}
+			moveType walk, run, sprint
+			{
+				goto prone2run
+			}
+			moveType walkbk, runbk
+			{
+				goto prone2runbk
+			}
+			anim_complete
+			{
+				goto idleprone
+			}
+		}
+	}
+	idlecr2walkcr sync stand2move_group
+	{
+		playerAnimType lobby, strafing left
+		{
+			both mp_unarmed_crouch_2_crouch_walk_l
+			speed_scaled_transition 0.4
+			aim crouch_unarmed_L_aims
+			blendtime 300
+		}
+		playerAnimType lobby, strafing right
+		{
+			both mp_unarmed_crouch_2_crouch_walk_r
+			speed_scaled_transition 0.6
+			aim crouch_unarmed_R_aims
+			blendtime 300
+		}
+		playerAnimType lobby
+		{
+			both mp_unarmed_crouch_2_crouch_walk_f
+			speed_scaled_transition 0.65
+			aim crouch_unarmed_F_aims
+			blendtime 300
+		}
+		playerAnimTypePrimary rocketlauncher, weapon_position ads, strafing left
+		{
+			both mp_rpg_crouch_2_crouch_l_ads
+			speed_scaled_transition
+			aim crouch_rocket_L_aims
+		}
+		playerAnimTypePrimary rocketlauncher, weapon_position ads, strafing right
+		{
+			both mp_rpg_crouch_2_crouch_r_ads
+			speed_scaled_transition
+			aim crouch_rocket_R_aims
+		}
+		playerAnimTypePrimary rocketlauncher, weapon_position ads
+		{
+			both mp_rpg_crouch_2_crouch_f_ads
+			speed_scaled_transition
+			aim crouch_rocket_F_aims
+		}
+		playerAnimTypePrimary rocketlauncher, strafing left
+		{
+			both mp_rpg_crouch_2_crouch_l
+			speed_scaled_transition 0.95
+			aim crouch_rocket_L_aims
+		}
+		playerAnimTypePrimary rocketlauncher, strafing right
+		{
+			both mp_rpg_crouch_2_crouch_r
+			speed_scaled_transition 0.95
+			aim crouch_rocket_R_aims
+		}
+		playerAnimTypePrimary rocketlauncher
+		{
+			both mp_rpg_crouch_2_crouch_f
+			speed_scaled_transition 0.75
+			aim crouch_rocket_F_aims
+		}
+		ball_carrier, strafing left
+		{
+			both mp_uplink_crouch_2_crouch_l
+			speed_scaled_transition 0.8
+			aim crouch_uplink_ball_L_aims
+		}
+		ball_carrier, strafing right
+		{
+			both mp_uplink_crouch_2_crouch_r
+			speed_scaled_transition 0.6
+			aim crouch_uplink_ball_R_aims
+		}
+		ball_carrier
+		{
+			both mp_uplink_crouch_2_crouch_f
+			speed_scaled_transition 0.8
+			aim crouch_uplink_ball_F_aims
+		}
+		playerAnimTypePrimary carepackage, strafing left
+		{
+			both mp_carepackage_crouch_2_crouch_l
+			speed_scaled_transition 0.8
+			aim crouch_knife_L_aims
+		}
+		playerAnimTypePrimary carepackage, strafing right
+		{
+			both mp_carepackage_crouch_2_crouch_r
+			speed_scaled_transition 0.6
+			aim crouch_knife_R_aims
+		}
+		playerAnimTypePrimary carepackage
+		{
+			both mp_carepackage_crouch_2_crouch_f
+			speed_scaled_transition 0.8
+			aim crouch_knife_F_aims
+		}
+		playerAnimTypePrimary combatknife AND shovel, strafing left
+		{
+			both mp_jug_maniac_crouch_2_walk_l
+			speed_scaled_transition 0.8
+			aim crouch_knife_L_aims
+		}
+		playerAnimTypePrimary combatknife AND shovel, strafing right
+		{
+			both mp_jug_maniac_crouch_2_walk_r
+			speed_scaled_transition 0.6
+			aim crouch_knife_R_aims
+		}
+		playerAnimTypePrimary combatknife AND shovel
+		{
+			both mp_jug_maniac_crouch_2_walk_f
+			speed_scaled_transition 0.8
+			aim crouch_knife_F_aims
+		}
+		playerAnimTypePrimary twohandedmelee, strafing left
+		{
+			both mp_sword_crouch_2_crouch_l
+			aim crouch_sword_L_aims
+		}
+		playerAnimTypePrimary twohandedmelee, strafing right
+		{
+			both mp_sword_crouch_2_crouch_r
+			aim crouch_sword_R_aims
+		}
+		playerAnimTypePrimary twohandedmelee
+		{
+			both mp_sword_crouch_2_crouch_f
+			aim crouch_sword_F_aims
+		}
+		playerAnimTypePrimary riotshield, strafing left
+		{
+			both mp_shield_crouch_2_crouch_l
+			speed_scaled_transition 0.85
+			aim crouch_shield_L_aims
+		}
+		playerAnimTypePrimary riotshield, strafing right
+		{
+			both mp_shield_crouch_2_crouch_r
+			speed_scaled_transition 0.75
+			aim crouch_shield_R_aims
+		}
+		playerAnimTypePrimary riotshield
+		{
+			both mp_shield_crouch_2_crouch_f
+			speed_scaled_transition 1
+			aim crouch_shield_F_aims
+		}
+		akimbo, strafing left
+		{
+			both mp_akimbo_crouch_2_walk_l
+			speed_scaled_transition 0.9
+			aim crouch_akimbo_L_aims
+		}
+		akimbo, strafing right
+		{
+			both mp_akimbo_crouch_2_walk_r
+			speed_scaled_transition 0.7
+			aim crouch_akimbo_R_aims
+		}
+		akimbo
+		{
+			both mp_akimbo_crouch_2_walk_f
+			speed_scaled_transition 0.75
+			aim crouch_akimbo_F_aims
+		}
+		playerAnimTypePrimary pistol, strafing left, weaponAttachment tactical_knife
+		{
+			both mp_tacknife_crouch_2_crouch_l
+			aim crouch_pistol_L_aims
+		}
+		playerAnimTypePrimary pistol, strafing right, weaponAttachment tactical_knife
+		{
+			both mp_tacknife_crouch_2_crouch_r
+			aim crouch_pistol_R_aims
+		}
+		playerAnimTypePrimary pistol, weaponAttachment tactical_knife
+		{
+			both mp_tacknife_crouch_2_crouch_f
+			aim crouch_pistol_F_aims
+		}
+		playerAnimTypePrimary pistol, strafing left
+		{
+			both mp_pistol_crouch_2_walk_l
+			aim crouch_pistol_L_aims
+		}
+		playerAnimTypePrimary pistol, strafing right
+		{
+			both mp_pistol_crouch_2_walk_r
+			aim crouch_pistol_R_aims
+		}
+		playerAnimTypePrimary pistol
+		{
+			both mp_pistol_crouch_2_walk_f
+			aim crouch_pistol_F_aims
+		}
+		playerAnimTypePrimary pistolcarry, strafing left
+		{
+			both mp_pistol_carry_crouch_2_walk_l
+			aim crouch_pistol_L_aims
+		}
+		playerAnimTypePrimary pistolcarry, strafing right
+		{
+			both mp_pistol_carry_crouch_2_walk_r
+			aim crouch_pistol_R_aims
+		}
+		playerAnimTypePrimary pistolcarry
+		{
+			both mp_pistol_carry_crouch_2_walk_f
+			aim crouch_pistol_F_aims
+		}
+		strafing left
+		{
+			both mp_crouch_2_crouch_L
+			speed_scaled_transition 0.55
+			aim crouch_rifle_L_aims
+		}
+		strafing right
+		{
+			both mp_crouch_2_crouch_R
+			speed_scaled_transition 0.55
+			aim crouch_rifle_R_aims
+		}
+		default
+		{
+			both mp_crouch_2_crouch_F
+			speed_scaled_transition 0.7
+			aim crouch_rifle_F_aims
+		}
+		transitions
+		{
+			moveType runcr, walkcr
+			{
+				ignore
+			}
+			moveType runcrbk, walkcrbk
+			{
+				goto idlecr2walkcrbk
+			}
+			moveType sprint
+			{
+				goto idlecr2sprint
+			}
+			moveType walk
+			{
+				goto idle2walk
+			}
+			moveType run
+			{
+				goto idle2run
+			}
+			moveType walkbk
+			{
+				goto idle2walkbk
+			}
+			moveType runbk
+			{
+				goto idle2runbk
+			}
+			moveType walkprone
+			{
+				goto walkcr2prone
+			}
+			moveType walkpronebk
+			{
+				goto walkcrbk2prone
+			}
+			anim_complete
+			{
+				goto walkcr
+			}
+		}
+	}
+	idlecr2walkcrbk sync stand2move_group
+	{
+		playerAnimType lobby, strafing left
+		{
+			both mp_unarmed_crouch_2_crouch_walk_l
+			aim crouch_unarmed_L_aims
+			blendtime 300
+		}
+		playerAnimType lobby, strafing right
+		{
+			both mp_unarmed_crouch_2_crouch_walk_r
+			aim crouch_unarmed_R_aims
+			blendtime 300
+		}
+		playerAnimType lobby
+		{
+			both mp_unarmed_crouch_2_crouch_walk_b
+			speed_scaled_transition 0.6
+			aim crouch_unarmed_F_aims
+			blendtime 300
+		}
+		playerAnimTypePrimary rocketlauncher, weapon_position ads, strafing left
+		{
+			both mp_rpg_crouch_2_crouch_l_ads
+			aim crouch_rocket_L_aims
+		}
+		playerAnimTypePrimary rocketlauncher, weapon_position ads, strafing right
+		{
+			both mp_rpg_crouch_2_crouch_r_ads
+			aim crouch_rocket_R_aims
+		}
+		playerAnimTypePrimary rocketlauncher, weapon_position ads
+		{
+			both mp_rpg_crouch_2_crouch_b_ads
+			speed_scaled_transition
+			aim crouch_rocket_F_aims
+		}
+		playerAnimTypePrimary rocketlauncher, strafing left
+		{
+			both mp_rpg_crouch_2_crouch_l
+			aim crouch_rocket_L_aims
+		}
+		playerAnimTypePrimary rocketlauncher, strafing right
+		{
+			both mp_rpg_crouch_2_crouch_r
+			aim crouch_rocket_R_aims
+		}
+		playerAnimTypePrimary rocketlauncher
+		{
+			both mp_rpg_crouch_2_crouch_b
+			speed_scaled_transition 0.75
+			aim crouch_rocket_F_aims
+		}
+		ball_carrier, strafing left
+		{
+			both mp_uplink_crouch_2_crouch_l
+			aim crouch_uplink_ball_L_aims
+		}
+		ball_carrier, strafing right
+		{
+			both mp_uplink_crouch_2_crouch_r
+			aim crouch_uplink_ball_R_aims
+		}
+		ball_carrier
+		{
+			both mp_uplink_crouch_2_crouch_b
+			speed_scaled_transition 0.8
+			aim crouch_uplink_ball_F_aims
+		}
+		playerAnimTypePrimary carepackage, strafing left
+		{
+			both mp_carepackage_crouch_2_crouch_l
+			aim crouch_knife_L_aims
+		}
+		playerAnimTypePrimary carepackage, strafing right
+		{
+			both mp_carepackage_crouch_2_crouch_r
+			aim crouch_knife_R_aims
+		}
+		playerAnimTypePrimary carepackage
+		{
+			both mp_carepackage_crouch_2_crouch_b
+			speed_scaled_transition 0.8
+			aim crouch_knife_F_aims
+		}
+		playerAnimTypePrimary combatknife AND shovel, strafing left
+		{
+			both mp_jug_maniac_crouch_2_walk_l
+			aim crouch_knife_L_aims
+		}
+		playerAnimTypePrimary combatknife AND shovel, strafing right
+		{
+			both mp_jug_maniac_crouch_2_walk_r
+			aim crouch_knife_R_aims
+		}
+		playerAnimTypePrimary combatknife AND shovel
+		{
+			both mp_jug_maniac_crouch_2_walk_b
+			speed_scaled_transition 0.8
+			aim crouch_knife_F_aims
+		}
+		playerAnimTypePrimary twohandedmelee, strafing left
+		{
+			both mp_sword_crouch_2_crouch_l
+			aim crouch_sword_L_aims
+		}
+		playerAnimTypePrimary twohandedmelee, strafing right
+		{
+			both mp_sword_crouch_2_crouch_r
+			aim crouch_sword_R_aims
+		}
+		playerAnimTypePrimary twohandedmelee
+		{
+			both mp_sword_crouch_2_crouch_b
+			aim crouch_sword_F_aims
+		}
+		playerAnimTypePrimary riotshield, strafing left
+		{
+			both mp_shield_crouch_2_crouch_l
+			aim crouch_shield_L_aims
+		}
+		playerAnimTypePrimary riotshield, strafing right
+		{
+			both mp_shield_crouch_2_crouch_r
+			aim crouch_shield_R_aims
+		}
+		playerAnimTypePrimary riotshield
+		{
+			both mp_shield_crouch_2_crouch_b
+			speed_scaled_transition 0.6
+			aim crouch_shield_F_aims
+		}
+		akimbo, strafing left
+		{
+			both mp_akimbo_crouch_2_walk_l
+			aim crouch_akimbo_L_aims
+		}
+		akimbo, strafing right
+		{
+			both mp_akimbo_crouch_2_walk_r
+			aim crouch_akimbo_R_aims
+		}
+		akimbo
+		{
+			both mp_akimbo_crouch_2_walk_b
+			speed_scaled_transition 0.55
+			aim crouch_akimbo_F_aims
+		}
+		playerAnimTypePrimary pistol, strafing left, weaponAttachment tactical_knife
+		{
+			both mp_tacknife_crouch_2_crouch_l
+			aim crouch_pistol_L_aims
+		}
+		playerAnimTypePrimary pistol, strafing right, weaponAttachment tactical_knife
+		{
+			both mp_tacknife_crouch_2_crouch_r
+			aim crouch_pistol_R_aims
+		}
+		playerAnimTypePrimary pistol, weaponAttachment tactical_knife
+		{
+			both mp_tacknife_crouch_2_crouch_b
+			aim crouch_pistol_F_aims
+		}
+		playerAnimTypePrimary pistol, strafing left
+		{
+			both mp_pistol_crouch_2_walk_l
+			aim crouch_pistol_L_aims
+		}
+		playerAnimTypePrimary pistol, strafing right
+		{
+			both mp_pistol_crouch_2_walk_r
+			aim crouch_pistol_R_aims
+		}
+		playerAnimTypePrimary pistol
+		{
+			both mp_pistol_crouch_2_walk_b
+			aim crouch_pistol_F_aims
+		}
+		playerAnimTypePrimary pistolcarry, strafing left
+		{
+			both mp_pistol_carry_crouch_2_walk_l
+			aim crouch_pistol_L_aims
+		}
+		playerAnimTypePrimary pistolcarry, strafing right
+		{
+			both mp_pistol_carry_crouch_2_walk_r
+			aim crouch_pistol_R_aims
+		}
+		playerAnimTypePrimary pistolcarry
+		{
+			both mp_pistol_carry_crouch_2_walk_b
+			aim crouch_pistol_F_aims
+		}
+		strafing left
+		{
+			both mp_crouch_2_crouch_L
+			aim crouch_rifle_L_aims
+		}
+		strafing right
+		{
+			both mp_crouch_2_crouch_R
+			aim crouch_rifle_R_aims
+		}
+		default
+		{
+			both mp_crouch_2_crouch_B
+			speed_scaled_transition 0.85
+			aim crouch_rifle_F_aims
+		}
+		
+		transitions
+		{
+			moveType runcrbk, walkcrbk
+			{
+				ignore
+			}
+			moveType runcr, walkcr
+			{
+				goto idlecr2walkcr
+			}
+			moveType sprint
+			{
+				goto idlecr2sprint
+			}
+			moveType walk
+			{
+				goto idle2walk
+			}
+			moveType run
+			{
+				goto idle2run
+			}
+			moveType walkbk
+			{
+				goto idle2walkbk
+			}
+			moveType runbk
+			{
+				goto idle2runbk
+			}
+			moveType walkprone
+			{
+				goto walkcr2prone
+			}
+			moveType walkpronebk
+			{
+				goto walkcrbk2prone
+			}
+			anim_complete
+			{
+				goto walkcrbk
+			}
+		}
+	}
+	idlecr2sprint sync stand2move_group, no_pitch_aiming
+	{
+		playerAnimType lobby
+		{
+			both mp_unarmed_crouch_2_sprint
+			speed_scaled_transition 0.5
+			aim run_unarmed_F_aims
+			blendtime 35
+		}
+		ball_carrier
+		{
+			both mp_uplink_crouch_2_sprint
+			aim run_uplink_ball_F_aims
+			blendtime 35
+		}
+		playerAnimTypePrimary rocketlauncher
+		{
+			both mp_rpg_crouch_idle_2_sprint
+			aim run_rocket_F_aims
+			blendtime 35
+		}
+		playerAnimTypePrimary carepackage
+		{
+			both mp_carepackage_crouch_2_sprint
+			aim run_combatknife_F_aims
+			blendtime 35
+		}
+		playerAnimTypePrimary combatknife AND shovel
+		{
+			both mp_jug_maniac_crouch_2_sprint
+			aim run_combatknife_F_aims
+			blendtime 35
+		}
+		playerAnimTypePrimary twohandedmelee
+		{
+			both mp_sword_crouch_2_sprint
+			aim run_sword_F_aims
+			blendtime 35
+		}
+		playerAnimTypePrimary riotshield, gungho
+		{
+			both mp_shield_crouch_2_sprint_gungho
+			aim run_shield_F_aims
+			blendtime 35
+		}
+		playerAnimTypePrimary riotshield
+		{
+			both mp_shield_crouch_2_sprint
+			aim run_shield_F_aims
+			blendtime 35
+		}
+		akimbo
+		{
+			both mp_akimbo_crouch_to_sprint
+			aim run_akimbo_F_aims
+			blendtime 35
+		}
+		playerAnimTypePrimary pistol, weaponAttachment tactical_knife
+		{
+			both mp_tacknife_crouch_2_sprint
+			aim run_pistol_F_aims
+			blendtime 35
+		}
+		playerAnimTypePrimary pistol
+		{
+			both mp_pistol_crouch_to_sprint_1
+			aim run_pistol_F_aims
+			blendtime 35
+		}
+		playerAnimTypePrimary pistolcarry
+		{
+			both mp_pistol_carry_crouch_2_sprint
+			aim run_pistol_F_aims
+			blendtime 35
+		}
+		default
+		{
+			both mp_crouch_idle_to_sprint
+			aim run_rifle_F_aims
+			blendtime 35
+		}
+		
+		transitions
+		{
+			moveType sprint
+			{
+				ignore
+			}
+			anim_complete
+			{
+				goto sprint
+			}
+		}
+	}
+	idleprone
+	{
+		swimming
+		{
+			face mp_s2_facial_bs_idle
+			both mp_swimming_idle
+			aim idle_combatknife_aims
+		}
+		mounted mg42, firing
+		{
+			face mp_s2_facial_bs_idle
+			both proneSAWgunner_aim turretanim
+		}
+		mounted mg42
+		{
+			face mp_s2_facial_bs_idle
+			both proneSAWgunner_aim turretanim
+		}
+		mounted plant, firing
+		{
+			face mp_s2_facial_bs_idle
+			both proneSAWgunner_aim turretanim
+		}
+		mounted plant
+		{
+			face mp_s2_facial_bs_idle
+			both proneSAWgunner_aim turretanim
+		}
+		mounted remote
+		{
+			face mp_s2_facial_bs_idle
+			both pb_prone_tablet
+		}
+		playerAnimType bangalore
+		{
+			face mp_s2_facial_bs_idle
+			both mp_tool_bangalore_prone_idle notbaseidle
+		}
+		playerAnimType tntbundle
+		{
+			face mp_s2_facial_bs_idle
+			both mp_tool_tntbundle_prone_idle notbaseidle
+		}
+		playerAnimType briefcase
+		{
+			face mp_s2_facial_bs_idle
+			both mp_srchdstry_prone_bomb_idle notbaseidle
+		}
+		playerAnimType hammer
+		{
+			face mp_s2_facial_bs_idle
+			both mp_tool_prone_hammer_loop notbaseidle
+		}
+		playerAnimType wrench
+		{
+			face mp_s2_facial_bs_idle
+			both mp_tool_prone_wrench_loop notbaseidle
+		}
+		playerAnimType genericuse
+		{
+			face mp_s2_facial_bs_idle
+			both mp_raids_generic_prone_use_idle notbaseidle
+		}
+		playerAnimType laptop
+		{
+			face mp_s2_facial_bs_idle
+			both pb_prone_tablet
+		}
+		akimbo
+		{
+			face mp_s2_facial_bs_idle
+			both mp_akimbo_prone_idle
+			aim prone_akimbo_aims
+			turns
+			{
+				turnleft mp_akimbo_prone_aim_turn_l aim prone_akimbo_aims
+				turnright mp_akimbo_prone_aim_turn_r aim prone_akimbo_aims
+			}
+			twitches
+			{
+				mp_akimbo_prone_twitch_a aim prone_akimbo_aims
+				mp_akimbo_prone_twitch_b aim prone_akimbo_aims
+				mp_akimbo_prone_twitch_c aim prone_akimbo_aims
+				mp_akimbo_prone_twitch_d aim prone_akimbo_aims
+				mp_akimbo_prone_twitch_e aim prone_akimbo_aims
+			}
+		}
+		playerAnimTypePrimary pistol, weapon_position ads, weaponAttachment tactical_knife
+		{
+			face mp_s2_facial_bs_idle
+			both mp_tacknife_prone_idle_copy
+			aim prone_pistol_aims
+			turns
+			{
+				turnleft mp_tacknife_prone_aim_turn_l aim prone_pistol_aims
+				turnright mp_tacknife_prone_aim_turn_r aim prone_pistol_aims
+			}
+		}
+		playerAnimTypePrimary pistol, weaponAttachment tactical_knife
+		{
+			face mp_s2_facial_bs_idle
+			both mp_tacknife_prone_idle
+			aim prone_pistol_aims
+			turns
+			{
+				turnleft mp_tacknife_prone_aim_turn_l aim prone_pistol_aims
+				turnright mp_tacknife_prone_aim_turn_r aim prone_pistol_aims
+			}
+			twitches
+			{
+				mp_tacknife_prone_idle_twitch_a aim prone_pistol_aims
+				mp_tacknife_prone_idle_twitch_b aim prone_pistol_aims
+			}
+		}
+		playerAnimTypePrimary pistol, weapon_position ads
+		{
+			face mp_s2_facial_bs_idle
+			both mp_pistol_prone_idle_copy
+			aim prone_pistol_aims
+			turns
+			{
+				turnleft mp_pistol_prone_aim_turn_l aim prone_pistol_aims
+				turnright mp_pistol_prone_aim_turn_r aim prone_pistol_aims
+			}
+		}
+		playerAnimTypePrimary pistol
+		{
+			face mp_s2_facial_bs_idle
+			both mp_pistol_prone_idle
+			aim prone_pistol_aims
+			turns
+			{
+				turnleft mp_pistol_prone_aim_turn_l aim prone_pistol_aims
+				turnright mp_pistol_prone_aim_turn_r aim prone_pistol_aims
+			}
+			twitches
+			{
+				mp_pistol_prone_twitch_a aim prone_pistol_aims
+				mp_pistol_prone_twitch_b aim prone_pistol_aims
+				mp_pistol_prone_twitch_c aim prone_pistol_aims
+				mp_pistol_prone_twitch_d aim prone_pistol_aims
+			}
+		}
+		playerAnimTypePrimary pistolcarry, weapon_position ads
+		{
+			face mp_s2_facial_bs_idle
+			both mp_pistol_carry_prone_idle_ads
+			aim prone_pistol_aims
+			turns
+			{
+				turnleft mp_pistol_carry_prone_turn_l aim prone_pistol_aims
+				turnright mp_pistol_carry_prone_turn_r aim prone_pistol_aims
+			}
+		}
+		playerAnimTypePrimary pistolcarry
+		{
+			face mp_s2_facial_bs_idle
+			both mp_pistol_carry_prone_idle
+			aim prone_pistol_aims
+			turns
+			{
+				turnleft mp_pistol_carry_prone_turn_l aim prone_pistol_aims
+				turnright mp_pistol_carry_prone_turn_r aim prone_pistol_aims
+			}
+			twitches
+			{
+				mp_pistol_carry_prone_twitch_a aim prone_pistol_aims
+				mp_pistol_carry_prone_twitch_b aim prone_pistol_aims
+			}
+		}
+  		playerAnimTypePrimary rocketlauncher, weapon_position ads
+  		{
+			face mp_s2_facial_bs_idle
+   			both mp_rpg_prone_idle_copy
+   			aim prone_rocket_aims
+   			turns
+			{
+				turnleft mp_rpg_prone_turn_l aim prone_rocket_aims
+				turnright mp_rpg_prone_turn_r aim prone_rocket_aims
+			}
+ 		}
+  		playerAnimTypePrimary rocketlauncher
+  		{
+			face mp_s2_facial_bs_idle
+   			both mp_rpg_prone_idle
+   			aim prone_rocket_aims
+   			turns
+			{
+				turnleft mp_rpg_prone_turn_l aim prone_rocket_aims
+				turnright mp_rpg_prone_turn_r aim prone_rocket_aims
+			}
+ 			twitches
+			{
+				mp_rpg_prone_twitch_a aim prone_rocket_aims
+				mp_rpg_prone_twitch_b aim prone_rocket_aims
+				mp_rpg_prone_twitch_c aim prone_rocket_aims
+				mp_rpg_prone_twitch_d aim prone_rocket_aims
+			}
+ 		}
+		playerAnimType sniper
+		{
+			face mp_s2_facial_bs_idle
+			both pb_prone_aim_sniper aim prone_rifle_aims turns
+			{
+				turnleft mp_prone_aim_turn_l aim prone_rifle_aims
+				turnright mp_prone_aim_turn_r aim prone_rifle_aims
+			}
+		}
+		ball_carrier
+		{
+			face mp_s2_facial_bs_idle
+			both mp_uplink_prone_idle
+			aim prone_uplink_ball_aims
+			turns
+			{
+				turnleft mp_uplink_prone_turn_l aim prone_uplink_ball_aims
+				turnright mp_uplink_prone_turn_r aim prone_uplink_ball_aims
+			}
+			twitches
+			{
+				mp_uplink_prone_idle_twitch_a aim prone_uplink_ball_aims
+				mp_uplink_prone_idle_twitch_b aim prone_uplink_ball_aims
+				mp_uplink_prone_idle_twitch_c aim prone_uplink_ball_aims
+				mp_uplink_prone_idle_twitch_d aim prone_uplink_ball_aims
+				mp_uplink_prone_idle_twitch_e aim prone_uplink_ball_aims
+			}
+		}
+		playerAnimTypePrimary carepackage
+		{
+			face mp_s2_facial_bs_idle
+			both mp_carepackage_prone_idle
+			aim prone_combatknife_aims
+			turns
+			{
+				turnleft mp_carepackage_prone_turn_l aim prone_combatknife_aims
+				turnright mp_carepackage_prone_turn_r aim prone_combatknife_aims
+			}
+			twitches
+			{
+				mp_carepackage_prone_idle_twitch_a aim prone_combatknife_aims
+				mp_carepackage_prone_idle_twitch_b aim prone_combatknife_aims
+				mp_carepackage_prone_idle_twitch_c aim prone_combatknife_aims
+				mp_carepackage_prone_idle_twitch_d aim prone_combatknife_aims
+				mp_carepackage_prone_idle_twitch_e aim prone_combatknife_aims
+			}
+		}
+		playerAnimTypePrimary combatknife AND shovel
+		{
+			face mp_s2_facial_bs_idle
+			both mp_jug_maniac_prone_idle
+			aim prone_combatknife_aims
+			turns
+			{
+				turnleft mp_jug_maniac_prone_turn_l aim prone_combatknife_aims
+				turnright mp_jug_maniac_prone_turn_r aim prone_combatknife_aims
+			}
+			twitches
+			{
+				mp_jug_maniac_prone_twitch_a aim prone_combatknife_aims
+				mp_jug_maniac_prone_twitch_b aim prone_combatknife_aims
+				mp_jug_maniac_prone_twitch_c aim prone_combatknife_aims
+				mp_jug_maniac_prone_twitch_d aim prone_combatknife_aims
+				mp_jug_maniac_prone_twitch_e aim prone_combatknife_aims
+			}
+		}
+		playerAnimTypePrimary twohandedmelee
+		{
+			face mp_s2_facial_bs_idle
+			both mp_sword_prone_idle
+			aim prone_sword_aims
+			turns
+			{
+				turnleft mp_sword_prone_turn_l aim prone_sword_aims
+				turnright mp_sword_prone_turn_r aim prone_sword_aims
+			}
+			twitches
+			{
+				mp_sword_prone_idle_twitch_a aim prone_sword_aims
+				mp_sword_prone_idle_twitch_b aim prone_sword_aims
+				mp_sword_prone_idle_twitch_c aim prone_sword_aims
+			}
+		}
+		default
+		{
+			face mp_s2_facial_bs_idle
+			both mp_prone_idle_iw6
+			aim prone_rifle_aims
+			turns
+			{
+				turnleft mp_prone_aim_turn_l aim prone_rifle_aims
+				turnright mp_prone_aim_turn_r aim prone_rifle_aims
+			}
+			twitches
+			{
+				mp_prone_twitch_a_iw6 aim prone_rifle_aims
+				mp_prone_twitch_b_iw6 aim prone_rifle_aims
+				mp_prone_twitch_c_iw6 aim prone_rifle_aims
+				mp_prone_twitch_d_iw6 aim prone_rifle_aims
+			}
+		}
+		
+		transitions
+		{
+			moveType idlecr
+			{
+				goto idleprone2idlecr
+			}
+			moveType idle
+			{
+				goto idleprone2idle
+			}
+			moveType walkprone
+			{
+				goto idleprone2walkprone
+			}
+			moveType walkpronebk
+			{
+				goto idleprone2walkpronebk
+			}
+			moveType walk, run, sprint
+			{
+				goto prone2run
+			}
+			moveType walkbk, runbk
+			{
+				goto prone2runbk
+			}
+			moveType walkcr, runcr
+			{
+				goto prone2walkcr
+			}
+			moveType walkcrbk, runcrbk
+			{
+				goto prone2walkcrbk
+			}
+		}
+	}
+	idleprone2idlecr sync prone2stand_group
+	{
+		playerAnimTypePrimary rocketlauncher
+		{
+			both mp_rpg_prone_2_crouch
+			aim crouch_rocket_aims
+		}
+		ball_carrier
+		{
+			both mp_uplink_prone_2_crouch
+			aim crouch_uplink_ball_aims
+		}
+		playerAnimType carepackage
+		{
+			both mp_carepackage_prone_2_crouch
+			aim crouch_combatknife_aims
+		}
+		playerAnimTypePrimary combatknife AND shovel
+		{
+			both mp_jug_maniac_prone_2_crouch
+			aim crouch_combatknife_aims
+		}
+		playerAnimTypePrimary twohandedmelee
+		{
+			both mp_sword_prone_2_crouch
+			aim crouch_sword_aims
+		}
+		akimbo
+		{
+			both mp_akimbo_prone_2_crouch
+			aim crouch_akimbo_aims
+		}
+		playerAnimTypePrimary pistol, weaponAttachment tactical_knife
+		{
+			both mp_tacknife_prone_2_crouch
+			aim crouch_pistol_aims
+		}
+		playerAnimTypePrimary pistol
+		{
+			both mp_pistol_prone_2_crouch
+			aim crouch_pistol_aims
+		}
+		playerAnimTypePrimary pistolcarry
+		{
+			both mp_pistol_carry_prone_2_crouch
+			aim crouch_pistol_aims
+		}
+		playerAnimType hammer
+		{
+			both mp_tool_hammer_prone_2_crouch
+		}
+		playerAnimType wrench
+		{
+			both mp_tool_wrench_prone_2_crouch
+		}
+		playerAnimType genericuse
+		{
+			both mp_raids_generic_prone_2_crouch_use
+		}
+		default
+		{
+			both mp_prone_2_crouch
+			aim crouch_rifle_aims
+		}
+		
+		transitions
+		{
+			moveType idlecr
+			{
+				ignore
+			}
+			moveType idle
+			{
+				goto idleprone2idle
+			}
+			moveType idleprone
+			{
+				goto idlecr2idleprone
+			}
+			moveType walk, run, sprint
+			{
+				goto prone2run
+			}
+			moveType walkbk, runbk
+			{
+				goto prone2runbk
+			}
+			moveType walkcr, runcr
+			{
+				goto prone2walkcr
+			}
+			moveType walkcrbk, runcrbk
+			{
+				goto prone2walkcrbk
+			}
+			anim_complete
+			{
+				goto idlecr
+			}
+		}
+	}
+	idleprone2idle sync prone2stand_group
+	{
+		weaponclass autofire AND spread
+		{
+			both mp_smg_prone_2_stand
+			aim idle_rifle_aims
+		}
+		playerAnimTypePrimary rocketlauncher
+		{
+			both mp_rpg_prone_2_stand
+			aim idle_rocket_aims
+		}
+		ball_carrier
+		{
+			both mp_uplink_prone_2_stand
+			aim idle_uplink_ball_aim
+		}
+		playerAnimType carepackage
+		{
+			both mp_carepackage_prone_2_stand
+			aim idle_combatknife_aims
+		}
+		playerAnimTypePrimary combatknife AND shovel
+		{
+			both mp_jug_maniac_prone_2_stand
+			aim idle_combatknife_aims
+		}
+		playerAnimTypePrimary twohandedmelee
+		{
+			both mp_sword_prone_2_stand
+			aim idle_sword_aims
+		}
+		akimbo
+		{
+			both mp_akimbo_prone_2_stand
+			aim idle_akimbo_aims
+		}
+		playerAnimTypePrimary pistol, weaponAttachment tactical_knife
+		{
+			both mp_tacknife_prone_2_stand
+			aim idle_pistol_aims
+		}
+		playerAnimTypePrimary pistol
+		{
+			both mp_pistol_prone_2_stand
+			aim idle_pistol_aims
+		}
+		playerAnimTypePrimary pistolcarry
+		{
+			both mp_pistol_carry_prone_2_stand
+			aim idle_pistol_aims
+		}
+		default
+		{
+			both mp_prone_2_stand
+			aim idle_rifle_aims
+		}
+		
+		transitions
+		{
+			moveType idle
+			{
+				ignore
+			}
+			moveType idleprone
+			{
+				goto idlecr2idleprone
+			}
+			moveType idlecr
+			{
+				goto idle2idlecr
+			}
+			moveType walk, run, sprint
+			{
+				goto prone2run
+			}
+			moveType walkbk, runbk
+			{
+				goto prone2runbk
+			}
+			anim_complete
+			{
+				goto idle
+			}
+		}
+	}
+	idleprone2walkprone sync stand2move_group, interrupt_torso
+	{
+		playerAnimTypePrimary rocketlauncher, strafing left
+		{
+			both mp_rpg_prone_2_prone_l
+			speed_scaled_transition
+		}
+		playerAnimTypePrimary rocketlauncher, strafing right
+		{
+			both mp_rpg_prone_2_prone_r
+			speed_scaled_transition
+		}
+		playerAnimTypePrimary rocketlauncher
+		{
+			both mp_rpg_prone_2_prone_f
+			speed_scaled_transition
+		}
+		ball_carrier, strafing left
+		{
+			both mp_uplink_prone_2_prone_l
+			speed_scaled_transition
+		}
+		ball_carrier, strafing right
+		{
+			both mp_uplink_prone_2_prone_r
+			speed_scaled_transition
+		}
+		ball_carrier
+		{
+			both mp_uplink_prone_2_prone_f
+			speed_scaled_transition
+		}
+		playerAnimTypePrimary carepackage, strafing left
+		{
+			both mp_carepackage_prone_2_prone_l
+			speed_scaled_transition
+		}
+		playerAnimTypePrimary carepackage, strafing right
+		{
+			both mp_carepackage_prone_2_prone_r
+			speed_scaled_transition
+		}
+		playerAnimTypePrimary carepackage
+		{
+			both mp_carepackage_prone_2_prone_f
+			speed_scaled_transition
+		}
+		playerAnimTypePrimary combatknife AND shovel, strafing left
+		{
+			both mp_jug_maniac_prone_2_prone_l
+			speed_scaled_transition
+		}
+		playerAnimTypePrimary combatknife AND shovel, strafing right
+		{
+			both mp_jug_maniac_prone_2_prone_r
+			speed_scaled_transition
+		}
+		playerAnimTypePrimary combatknife AND shovel
+		{
+			both mp_jug_maniac_prone_2_prone_f
+			speed_scaled_transition
+		}
+		playerAnimTypePrimary twohandedmelee, strafing left
+		{
+			both mp_sword_prone_2_prone_l
+		}
+		playerAnimTypePrimary twohandedmelee, strafing right
+		{
+			both mp_sword_prone_2_prone_r
+		}
+		playerAnimTypePrimary twohandedmelee
+		{
+			both mp_sword_prone_2_prone_f
+		}
+		akimbo, strafing left
+		{
+			both mp_akimbo_prone_2_prone_l
+			speed_scaled_transition
+		}
+		akimbo, strafing right
+		{
+			both mp_akimbo_prone_2_prone_r
+			speed_scaled_transition
+		}
+		akimbo
+		{
+			both mp_akimbo_prone_2_prone_f
+			speed_scaled_transition
+		}
+		playerAnimTypePrimary pistol, strafing left, weaponAttachment tactical_knife
+		{
+			both mp_tacknife_prone_2_prone_l
+		}
+		playerAnimTypePrimary pistol, strafing right, weaponAttachment tactical_knife
+		{
+			both mp_tacknife_prone_2_prone_r
+		}
+		playerAnimTypePrimary pistol, weaponAttachment tactical_knife
+		{
+			both mp_tacknife_prone_2_prone_f
+		}
+		playerAnimTypePrimary pistol, strafing left
+		{
+			both mp_pistol_prone_2_prone_l
+			speed_scaled_transition
+		}
+		playerAnimTypePrimary pistol, strafing right
+		{
+			both mp_pistol_prone_2_prone_r
+			speed_scaled_transition
+		}
+		playerAnimTypePrimary pistol
+		{
+			both mp_pistol_prone_2_prone_f
+			speed_scaled_transition
+		}
+		playerAnimTypePrimary pistolcarry, strafing left
+		{
+			both mp_pistol_carry_prone_2_prone_l
+			speed_scaled_transition
+		}
+		playerAnimTypePrimary pistolcarry, strafing right
+		{
+			both mp_pistol_carry_prone_2_prone_r
+			speed_scaled_transition
+		}
+		playerAnimTypePrimary pistolcarry
+		{
+			both mp_pistol_carry_prone_2_prone_f
+			speed_scaled_transition
+		}
+		strafing left
+		{
+			both mp_iw6_prone_2_prone_l
+			speed_scaled_transition
+		}
+		strafing right
+		{
+			both mp_iw6_prone_2_prone_r
+			speed_scaled_transition
+		}
+		default
+		{
+			both mp_iw6_prone_2_prone_f
+			speed_scaled_transition
+		}
+		
+		transitions
+		{
+			moveType walkprone
+			{
+				ignore
+			}
+			moveType walkpronebk
+			{
+				goto idleprone2walkpronebk
+			}
+			moveType idlecr
+			{
+				goto idleprone2idlecr
+			}
+			moveType idle
+			{
+				goto idleprone2idle
+			}
+			moveType walk, run, sprint
+			{
+				goto prone2run
+			}
+			moveType walkbk, runbk
+			{
+				goto prone2runbk
+			}
+			moveType walkcr, runcr
+			{
+				goto prone2walkcr
+			}
+			moveType walkcrbk, runcrbk
+			{
+				goto prone2walkcrbk
+			}
+			anim_complete
+			{
+				goto walkprone
+			}
+		}
+	}
+	idleprone2walkpronebk sync stand2move_group, interrupt_torso
+	{
+		playerAnimTypePrimary rocketlauncher, strafing left
+		{
+			both mp_rpg_prone_2_prone_l
+		}
+		playerAnimTypePrimary rocketlauncher, strafing right
+		{
+			both mp_rpg_prone_2_prone_r
+		}
+		playerAnimTypePrimary rocketlauncher
+		{
+			both mp_rpg_prone_2_prone_b
+			speed_scaled_transition
+		}
+		ball_carrier, strafing left
+		{
+			both mp_uplink_prone_2_prone_l
+		}
+		ball_carrier, strafing right
+		{
+			both mp_uplink_prone_2_prone_r
+		}
+		ball_carrier
+		{
+			both mp_uplink_prone_2_prone_b
+			speed_scaled_transition
+		}
+		playerAnimTypePrimary carepackage, strafing left
+		{
+			both mp_carepackage_prone_2_prone_l
+		}
+		playerAnimTypePrimary carepackage, strafing right
+		{
+			both mp_carepackage_prone_2_prone_r
+		}
+		playerAnimTypePrimary carepackage
+		{
+			both mp_carepackage_prone_2_prone_b
+			speed_scaled_transition
+		}
+		playerAnimTypePrimary combatknife AND shovel, strafing left
+		{
+			both mp_jug_maniac_prone_2_prone_l
+		}
+		playerAnimTypePrimary combatknife AND shovel, strafing right
+		{
+			both mp_jug_maniac_prone_2_prone_r
+		}
+		playerAnimTypePrimary combatknife AND shovel
+		{
+			both mp_jug_maniac_prone_2_prone_b
+			speed_scaled_transition
+		}
+		playerAnimTypePrimary twohandedmelee, strafing left
+		{
+			both mp_sword_prone_2_prone_l
+		}
+		playerAnimTypePrimary twohandedmelee, strafing right
+		{
+			both mp_sword_prone_2_prone_r
+		}
+		playerAnimTypePrimary twohandedmelee
+		{
+			both mp_sword_prone_2_prone_b
+		}
+		akimbo, strafing left
+		{
+			both mp_akimbo_prone_2_prone_l
+		}
+		akimbo, strafing right
+		{
+			both mp_akimbo_prone_2_prone_r
+		}
+		akimbo
+		{
+			both mp_akimbo_prone_2_prone_b
+		}
+		playerAnimTypePrimary pistol, strafing left, weaponAttachment tactical_knife
+		{
+			both mp_tacknife_prone_2_prone_l
+		}
+		playerAnimTypePrimary pistol, strafing right, weaponAttachment tactical_knife
+		{
+			both mp_tacknife_prone_2_prone_r
+		}
+		playerAnimTypePrimary pistol, weaponAttachment tactical_knife
+		{
+			both mp_tacknife_prone_2_prone_b
+		}
+		playerAnimTypePrimary pistol, strafing left
+		{
+			both mp_pistol_prone_2_prone_l
+		}
+		playerAnimTypePrimary pistol, strafing right
+		{
+			both mp_pistol_prone_2_prone_r
+		}
+		playerAnimTypePrimary pistol
+		{
+			both mp_pistol_prone_2_prone_b
+		}
+		playerAnimTypePrimary pistolcarry, strafing left
+		{
+			both mp_pistol_carry_prone_2_prone_l
+		}
+		playerAnimTypePrimary pistolcarry, strafing right
+		{
+			both mp_pistol_carry_prone_2_prone_r
+		}
+		playerAnimTypePrimary pistolcarry
+		{
+			both mp_pistol_carry_prone_2_prone_b
+		}
+		strafing left
+		{
+			both mp_iw6_prone_2_prone_l
+		}
+		strafing right
+		{
+			both mp_iw6_prone_2_prone_r
+		}
+		default
+		{
+			both mp_iw6_prone_2_prone_b
+			speed_scaled_transition
+		}
+		
+		transitions
+		{
+			moveType walkpronebk
+			{
+				ignore
+			}
+			moveType walkprone
+			{
+				goto idleprone2walkprone
+			}
+			moveType idlecr
+			{
+				goto idleprone2idlecr
+			}
+			moveType idle
+			{
+				goto idleprone2idle
+			}
+			moveType walk, run, sprint
+			{
+				goto prone2run
+			}
+			moveType walkbk, runbk
+			{
+				goto prone2runbk
+			}
+			moveType walkcr, runcr
+			{
+				goto prone2walkcr
+			}
+			moveType walkcrbk, runcrbk
+			{
+				goto prone2walkcrbk
+			}
+			anim_complete
+			{
+				goto walkpronebk
+			}
+		}
+	}
+	idlelaststand
+	{
+  		playerAnimType rocketlauncher
+		{
+			both pb_laststand_idle_RPG
+		}
+  		akimbo
+		{
+			both pb_laststand_idle_akimbo
+		}
+		default
+		{
+			both pb_laststand_idle
+		}
+	}
+	slide2crouch
+	{
+		playerAnimTypePrimary rocketlauncher 
+		{
+			both mp_slide_rpg_2_crouch
+		}
+		akimbo
+		{
+			both mp_slide_akimbo_2_crouch
+			aim crouch_akimbo_F_aims
+		}
+		playerAnimType lobby
+		{
+			both mp_unarmed_slide_2_crouch
+			aim crouch_unarmed_aims
+		}
+		ball_carrier
+		{
+			both mp_uplink_slide_2_crouch
+			aim crouch_combatknife_aims
+		}
+		playerAnimTypePrimary pistol 
+		{
+			both mp_slide_pistol_2_crouch
+			aim crouch_pistol_F_aims
+		}
+		default
+		{
+			both mp_slide_2_crouch
+			aim crouch_rifle_F_aims
+		}
+		transitions
+		{
+			moveType idlecr, slide_move
+			{
+				ignore
+			}
+			moveType runcr, walkcr
+			{
+				goto idlecr2walkcr
+			}
+			moveType runcrbk, walkcrbk
+			{
+				goto idlecr2walkcrbk
+			}
+			moveType run
+			{
+				goto idle2run
+			}
+			moveType walk
+			{
+				goto idle2walk
+			}
+			moveType runbk
+			{
+				goto idle2runbk
+			}
+			moveType walkbk
+			{
+				goto idle2walkbk
+			}
+			moveType sprint
+			{
+				goto idlecr2sprint
+			}
+			moveType idleprone
+			{
+				goto idlecr2idleprone
+			}
+			moveType idle
+			{
+				goto idlecr2idle
+			}
+			anim_complete
+			{
+				goto idlecr
+			}
+		}
+	}
+	slide2sprint sync stand2move_group
+	{
+		playerAnimType lobby
+		{
+			both mp_unarmed_crouch_2_sprint
+			aim run_unarmed_F_aims
+			blendtime 35
+		}
+		ball_carrier
+		{
+			both mp_uplink_crouch_2_sprint
+			aim run_uplink_ball_F_aims
+			blendtime 35
+		}
+		playerAnimTypePrimary rocketlauncher
+		{
+			both mp_rpg_crouch_idle_2_sprint
+			aim run_rocket_F_aims
+			blendtime 35
+		}
+		playerAnimTypePrimary carepackage
+		{
+			both mp_carepackage_crouch_2_sprint
+			aim run_combatknife_F_aims
+			blendtime 35
+		}
+		playerAnimTypePrimary combatknife AND shovel
+		{
+			both mp_jug_maniac_crouch_2_sprint
+			aim run_combatknife_F_aims
+			blendtime 35
+		}
+		playerAnimTypePrimary twohandedmelee
+		{
+			both mp_sword_crouch_2_sprint
+			aim run_sword_F_aims
+			blendtime 35
+		}
+		playerAnimTypePrimary riotshield
+		{
+			both mp_shield_crouch_2_sprint
+			aim run_shield_F_aims
+			blendtime 35
+		}
+		akimbo
+		{
+			both mp_akimbo_crouch_to_sprint
+			aim run_akimbo_F_aims
+			blendtime 35
+		}
+		playerAnimTypePrimary pistol, weaponAttachment tactical_knife
+		{
+			both mp_tacknife_crouch_2_sprint
+			aim run_pistol_F_aims
+			blendtime 35
+		}
+		playerAnimTypePrimary pistol
+		{
+			both mp_pistol_crouch_to_sprint_1
+			aim run_pistol_F_aims
+			blendtime 35
+		}
+		default
+		{
+			both mp_crouch_idle_to_sprint
+			aim run_rifle_F_aims
+			blendtime 35
+		}
+		transitions
+		{
+			moveType walk, run, sprint, slide_move
+			{
+				ignore
+			}
+			anim_complete
+			{
+				goto sprint
+			}
+		}
+	}
+}

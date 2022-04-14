@@ -1,0 +1,7 @@
+mp_raid_cobra,1,capture,build,bomb,escort,
+mp_raid_bulge,2,escort3x,ctf,escort,,
+mp_raid_aachen,3,hostage,destroy,escort,,
+mp_raid_d_day,4,capture2x,destroy,multibomb,,
+mp_raid_dlc2,5,intel,capture,deathmatch,,
+mp_raid_dlc3,6,airdrops,multibomb4x,flags,,
+mp_raid_dlc4,7,bomb,intel,escort,,

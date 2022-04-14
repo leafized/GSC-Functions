@@ -1,0 +1,506 @@
+{
+	map			"mp_aachen_v2"
+	longname	"MPUI_AACHEN"
+	gametype	"dm war dom conf sd hp sr twar infect ball"
+	description "MPUI_DESC_MAP_AACHEN"
+	mapimage	"preview_mp_aachen_v2"
+	mapoverlay	"compass_overlay_map_blank"
+	allieschar	"allies"
+	axischar	"axis"
+	environment	"urban"
+	mappack		"0"
+}
+
+{
+	map			"mp_forest_01"
+	longname	"MPUI_FOREST"
+	gametype	"dm war dom conf sd hp sr twar infect ball"
+	description	"MPUI_DESC_MAP_FOREST"
+	mapimage	"preview_mp_forest_01"
+	mapoverlay	"compass_overlay_map_blank"
+	allieschar	"allies"
+	axischar	"axis"
+	environment	"urban"
+	mappack		"0"
+}
+
+{
+	map			"mp_battleship_2"
+	longname	"MPUI_BATTLESHIP"
+	gametype	"dm war dom conf sd hp sr twar infect ball"
+	description	"MPUI_DESC_MAP_BATTLESHIP"
+	mapimage	"preview_mp_battleship_2"
+	mapoverlay	"compass_overlay_map_blank"
+	allieschar	"allies"
+	axischar	"axis"
+	environment	"urban"
+	mappack		"0"
+}
+
+{
+	map			"mp_london"
+	longname	"MPUI_LONDON"
+	gametype	"dm war dom conf sd hp sr twar infect ball"
+	description	"MPUI_DESC_MAP_LONDON"
+	mapimage	"preview_mp_london"
+	mapoverlay	"compass_overlay_map_blank"
+	allieschar	"allies"
+	axischar	"axis"
+	environment	"urban"
+	mappack		"0"
+}
+
+{
+	map			"mp_canon_farm"
+	longname	"MPUI_CANNON_FARM"
+	gametype	"dm war dom conf sd hp sr twar infect ball"
+	description	"MPUI_DESC_MAP_CANNON_FARM"
+	mapimage	"preview_mp_cannon_farm"
+	mapoverlay	"compass_overlay_map_blank"
+	allieschar	"allies"
+	axischar	"axis"
+	environment	"urban"
+	mappack		"0"
+}
+
+{
+	map			"mp_flak_tower"
+	longname	"MPUI_FLAK_TOWER"
+	gametype	"dm war dom conf sd hp sr twar infect ball"
+	description	"MPUI_DESC_MAP_FLAK_TOWER"
+	mapimage	"preview_mp_flak_tower"
+	mapoverlay	"compass_overlay_map_blank"
+	allieschar	"allies"
+	axischar	"axis"
+	environment	"urban"
+	mappack		"0"
+}
+
+{
+	map			"mp_gibraltar_02"
+	longname	"MPUI_GIBRALTAR_02"
+	gametype	"dm war dom conf sd hp sr twar infect ball"
+	description	"MPUI_DESC_MAP_GIBRALTAR_02"
+	mapimage	"preview_mp_gibraltar_02"
+	mapoverlay	"compass_overlay_map_blank"
+	allieschar	"allies"
+	axischar	"axis"
+	environment	"urban"
+	mappack		"0"
+}
+
+{
+	map			"mp_d_day"
+	longname	"MPUI_DDAY"
+	gametype	"dm war dom conf sd hp sr twar infect ball"
+	description	"MPUI_DESC_MAP_DDAY"
+	mapimage	"preview_mp_d_day"
+	mapoverlay	"compass_overlay_map_blank"
+	allieschar	"allies"
+	axischar	"axis"
+	environment	"urban"
+	mappack		"0"
+}
+
+{
+	map			"mp_france_village"
+	longname	"MPUI_FRANCE_VILLAGE"
+	gametype	"dm war dom conf sd hp sr twar infect ball"
+	description	"MPUI_DESC_MAP_FRANCE_VILLAGE"
+	mapimage	"preview_mp_france_village"
+	mapoverlay	"compass_overlay_map_blank"
+	allieschar	"allies"
+	axischar	"axis"
+	environment	"urban"
+	mappack		"0"
+}
+
+{
+	map			"mp_hub_allies"
+	longname	"MPUI_HUB"
+	gametype	"hub"
+	description	"MPUI_DESC_MAP_HUB"
+	mapimage	"preview_mp_hub_allies"
+	mapoverlay	"compass_overlay_map_blank"
+	allieschar	"allies"
+	axischar	"axis"
+	environment	"urban"
+	mappack		"0"
+}
+
+{
+	map			"mp_scorestreak_training"
+	longname	"MPUI_SCORESTREAK_MAP"
+	gametype	"scorestreak_training"
+	description	"MPUI_DESC_MAP_SCORESTREAK"
+	mapimage	"preview_mp_scorestreak_training"
+	mapoverlay	"compass_overlay_map_blank"
+	allieschar	"allies"
+	axischar	"axis"
+	environment	"urban"
+	mappack		"0"
+}
+
+{
+	map			"mp_raid_cobra"
+	longname	"MPUI_RAID_COBRA"
+	gametype	"raid"
+	description	"MPUI_DESC_MAP_RAID_COBRA"
+	mapimage	"preview_mp_raids_cobra_s2"
+	mapoverlay	"compass_overlay_map_blank"
+	allieschar	"allies"
+	axischar	"axis"
+	environment	"urban"
+	mappack		"0"
+}
+
+{
+	map			"mp_raid_d_day"
+	longname	"MPUI_RAID_D_DAY"
+	gametype	"raid"
+	description	"MPUI_DESC_MAP_RAID_D_DAY"
+	mapimage	"preview_mp_raids_d_day_s2"
+	mapoverlay	"compass_overlay_map_blank"
+	allieschar	"allies"
+	axischar	"axis"
+	environment	"urban"
+	mappack		"0"
+}
+
+{
+	map			"mp_raid_bulge"
+	longname	"MPUI_RAID_BULGE"
+	gametype	"raid"
+	description	"MPUI_DESC_MAP_RAID_BULGE"
+	mapimage	"preview_mp_raids_bulge_s2"
+	mapoverlay	"compass_overlay_map_blank"
+	allieschar	"allies"
+	axischar	"axis"
+	environment	"urban"
+	mappack		"0"
+}
+
+{
+	map			"mp_carentan_s2_winter"
+	longname	"MAP_MTX1_CARENTAN_WINTER"
+	gametype	"dm war dom conf sd hp sr twar infect ball"
+	description	"MAP_MTX1_CARENTAN_WINTER_DESC"
+	mapimage	"preview_mp_carentan_s2_winter"
+	mapoverlay	"compass_overlay_map_blank"
+	allieschar	"allies"
+	axischar	"axis"
+	environment	"urban"
+	mappack		"0"
+}
+
+{
+	map			"mp_shipment_s2"
+	longname	"MAP_MTX3_5_SHIPMENT"
+	gametype	"dm war dom conf sd hp sr twar infect ball control"
+	description	"MAP_MTX3_5_SHIPMENT_DESC"
+	mapimage	"preview_mp_shipment"
+	mapoverlay	"compass_overlay_map_blank"
+	allieschar	"allies"
+	axischar	"axis"
+	environment	"urban"
+	mappack		"0"
+}
+
+{
+	map			"mp_house"
+	longname	"MAP_MTX5_HOUSE"
+	gametype	"dm war dom conf sd hp sr twar infect ball control"
+	description	"MAP_MTX5_HOUSE_DESC"
+	mapimage	"preview_mp_house_01"
+	mapoverlay	"compass_overlay_map_blank"
+	allieschar	"allies"
+	axischar	"axis"
+	environment	"urban"
+	mappack		"0"
+}
+
+{
+	map			"mp_allieshub_combat_01"
+	longname	"MAP_DLC2_HQ"
+	gametype	"dm war dom conf sd hp sr twar infect ball"
+	description	"MAP_DLC2_HQ_DESC"
+	mapimage	"preview_mp_allieshub_combat_01"
+	mapoverlay	"compass_overlay_map_blank"
+	allieschar	"allies"
+	axischar	"axis"
+	environment	"urban"
+	mappack		"0"
+}
+
+{
+	map			"mp_sandbox_01"
+	longname	"MAP_MTX7_SANDBOX"
+	gametype	"dm war dom conf sd hp sr twar infect ball control"
+	description	"MAP_MTX7_SANDBOX_DESC"
+	mapimage	"preview_mp_sandbox_01"
+	mapoverlay	"compass_overlay_map_blank"
+	allieschar	"allies"
+	axischar	"axis"
+	environment	"urban"
+	mappack		"0"
+}
+
+{
+	map			"mp_egypt_02_dogfight"
+	longname	"MAP_MTX7_DOGFIGHT_EGYPT"
+	gametype	"dm war dom conf sd hp sr twar infect ball control"
+	description	"MAP_MTX7_DOGFIGHT_EGYPT_DESC"
+	mapimage	"preview_mp_egypt_02_dogfight"
+	mapoverlay	"compass_overlay_map_blank"
+	allieschar	"allies"
+	axischar	"axis"
+	environment	"urban"
+	mappack		"0"
+}
+
+{
+	map			"mp_mountain_dogfight"
+	longname	"MAP_MTX7_DOGFIGHT_MOUNTAIN"
+	gametype	"dm war dom conf sd hp sr twar infect ball control"
+	description	"MAP_MTX7_DOGFIGHT_MOUNTAIN_DESC"
+	mapimage	"preview_mp_mountain_dogfight"
+	mapoverlay	"compass_overlay_map_blank"
+	allieschar	"allies"
+	axischar	"axis"
+	environment	"urban"
+	mappack		"0"
+}
+
+{
+	map			"mp_carentan_s2"
+	longname	"MPUI_CARENTAN"
+	gametype	"dm war dom conf sd hp sr twar infect ball"
+	description	"MPUI_DESC_MAP_CARENTAN"
+	mapimage	"preview_mp_carentan_s2"
+	mapoverlay	"compass_overlay_map_blank"
+	allieschar	"allies"
+	axischar	"axis"
+	environment	"urban"
+	mappack		"1"
+}
+
+{
+	map			"mp_raid_aachen"
+	longname	"MAP_DLC1_RAID_AACHEN"
+	gametype	"raid"
+	description	"MAP_DLC1_RAID_AACHEN_DESC"
+	mapimage	"preview_mp_raids_aachen_s2"
+	mapoverlay	"compass_overlay_map_blank"
+	allieschar	"allies"
+	axischar	"axis"
+	environment	"urban"
+	mappack		"2"
+}
+
+{
+	map			"mp_prague"
+	longname	"MAP_DLC1_PRAGUE"
+	gametype	"dm war dom conf sd hp sr twar infect ball"
+	description	"MAP_DLC1_PRAGUE_DESC"
+	mapimage	"preview_mp_prague"
+	mapoverlay	"compass_overlay_map_blank"
+	allieschar	"allies"
+	axischar	"axis"
+	environment	"urban"
+	mappack		"2"
+}
+
+{
+	map			"mp_wolfslair"
+	longname	"MAP_DLC1_WOLFSLAIR"
+	gametype	"dm war dom conf sd hp sr twar infect ball"
+	description	"MAP_DLC1_WOLFSLAIR_DESC"
+	mapimage	"preview_mp_wolfslair"
+	mapoverlay	"compass_overlay_map_blank"
+	allieschar	"allies"
+	axischar	"axis"
+	environment	"urban"
+	mappack		"2"
+}
+
+{
+	map			"mp_wolfslair_free"
+	longname	"MAP_DLC1_WOLFSLAIR"
+	gametype	"dm war dom conf sd hp sr twar infect ball"
+	description	"MAP_DLC1_WOLFSLAIR_DESC"
+	mapimage	"preview_mp_wolfslair"
+	mapoverlay	"compass_overlay_map_blank"
+	allieschar	"allies"
+	axischar	"axis"
+	environment	"urban"
+	mappack		"0"
+}
+
+{
+	map			"mp_paris_s2"
+	longname	"MAP_DLC1_PARIS_S2"
+	gametype	"dm war dom conf sd hp sr twar infect ball"
+	description	"MAP_DLC1_PARIS_S2_DESC"
+	mapimage	"preview_mp_paris_s2"
+	mapoverlay	"compass_overlay_map_blank"
+	allieschar	"allies"
+	axischar	"axis"
+	environment	"urban"
+	mappack		"2"
+}
+
+{
+	map			"mp_v2_rocket_02"
+	longname	"MAP_DLC2_ROCKET_BASE"
+	gametype	"dm war dom conf sd hp sr twar infect ball"
+	description	"MAP_DLC2_ROCKET_BASE_DESC"
+	mapimage	"preview_mp_v2_rocket_02"
+	mapoverlay	"compass_overlay_map_blank"
+	allieschar	"allies"
+	axischar	"axis"
+	environment	"urban"
+	mappack		"3"
+}
+
+{
+	map			"mp_egypt_02"
+	longname	"MAP_DLC2_EGYPT"
+	gametype	"dm war dom conf sd hp sr twar infect ball"
+	description	"MAP_DLC2_EGYPT_DESC"
+	mapimage	"preview_mp_egypt_02"
+	mapoverlay	"compass_overlay_map_blank"
+	allieschar	"allies"
+	axischar	"axis"
+	environment	"urban"
+	mappack		"3"
+}
+
+{
+	map			"mp_dunkirk"
+	longname	"MAP_DLC2_DUNKIRK"
+	gametype	"dm war dom conf sd hp sr twar infect ball"
+	description	"MAP_DLC2_DUNKIRK_DESC"
+	mapimage	"preview_mp_dunkirk"
+	mapoverlay	"compass_overlay_map_blank"
+	allieschar	"allies"
+	axischar	"axis"
+	environment	"urban"
+	mappack		"3"
+}
+
+{
+	map			"mp_raid_dlc2"
+	longname	"MAP_DLC2_RAID_DLC2"
+	gametype	"raid"
+	description	"MAP_DLC2_RAID_DLC2_DESC"
+	mapimage	"preview_mp_raids_dlc2_s2"
+	mapoverlay	"compass_overlay_map_blank"
+	allieschar	"allies"
+	axischar	"axis"
+	environment	"urban"
+	mappack		"3"
+}
+
+{
+	map			"mp_stalingrad"
+	longname	"MAP_DLC3_STALINGRAD"
+	gametype	"dm war dom conf sd hp sr twar infect ball"
+	description	"MAP_DLC3_STALINGRAD_DESC"
+	mapimage	"preview_mp_stalingrad"
+	mapoverlay	"compass_overlay_map_blank"
+	allieschar	"allies"
+	axischar	"axis"
+	environment	"urban"
+	mappack		"4"
+}
+
+{
+	map			"mp_market_garden"
+	longname	"MAP_DLC3_MARKET_GARDEN"
+	gametype	"dm war dom conf sd hp sr twar infect ball"
+	description	"MAP_DLC3_MARKET_GARDEN_DESC"
+	mapimage	"preview_mp_market_garden"
+	mapoverlay	"compass_overlay_map_blank"
+	allieschar	"allies"
+	axischar	"axis"
+	environment	"urban"
+	mappack		"4"
+}
+
+{
+	map			"mp_monte_cassino_v2"
+	longname	"MAP_DLC3_MONTE_CASSINO"
+	gametype	"dm war dom conf sd hp sr twar infect ball"
+	description	"MAP_DLC3_MONTE_CASSINO_DESC"
+	mapimage	"preview_mp_monte_cassino_v2"
+	mapoverlay	"compass_overlay_map_blank"
+	allieschar	"allies"
+	axischar	"axis"
+	environment	"urban"
+	mappack		"4"
+}
+
+{
+	map			"mp_raid_dlc3"
+	longname	"MAP_DLC3_RAID_DLC3"
+	gametype	"raid"
+	description	"MAP_DLC3_RAID_DLC3_DESC"
+	mapimage	"preview_mp_raids_dlc3_s2"
+	mapoverlay	"compass_overlay_map_blank"
+	allieschar	"allies"
+	axischar	"axis"
+	environment	"urban"
+	mappack		"4"
+}
+
+{
+	map			"mp_raid_dlc4"
+	longname	"MAP_DLC4_RAID_DLC4"
+	gametype	"raid"
+	description	"MAP_DLC4_RAID_DLC4_DESC"
+	mapimage	"preview_mp_raids_dlc4_s2"
+	mapoverlay	"compass_overlay_map_blank"
+	allieschar	"allies"
+	axischar	"axis"
+	environment	"urban"
+	mappack		"5"
+}
+
+{
+	map			"mp_tank_graveyard_2"
+	longname	"MAP_DLC4_TANK_GRAVEYARD"
+	gametype	"dm war dom conf sd hp sr twar infect ball"
+	description	"MAP_DLC4_TANK_GRAVEYARD_DESC"
+	mapimage	"preview_mp_tank_graveyard_2"
+	mapoverlay	"compass_overlay_map_blank"
+	allieschar	"allies"
+	axischar	"axis"
+	environment	"urban"
+	mappack		"5"
+}
+
+{
+	map			"mp_airship"
+	longname	"MAP_DLC4_AIRSHIP"
+	gametype	"dm war dom conf sd hp sr twar infect ball"
+	description	"MAP_DLC4_AIRSHIP_DESC"
+	mapimage	"preview_mp_airship"
+	mapoverlay	"compass_overlay_map_blank"
+	allieschar	"allies"
+	axischar	"axis"
+	environment	"urban"
+	mappack		"5"
+}
+
+{
+	map			"mp_fuhrerbunker"
+	longname	"MAP_DLC4_FUHRERBUNKER"
+	gametype	"dm war dom conf sd hp sr twar infect ball"
+	description	"MAP_DLC4_FUHRERBUNKER_DESC"
+	mapimage	"preview_mp_fuhrerbunker"
+	mapoverlay	"compass_overlay_map_blank"
+	allieschar	"allies"
+	axischar	"axis"
+	environment	"urban"
+	mappack		"5"
+}

@@ -1,0 +1,17 @@
+gametype = ball
+commonOption.timeLimit = 10.000000
+commonOption.scoreLimit = 50
+commonOption.showKillcam = 1
+commonOption.spectateModeAllowed = 1
+commonOption.forceRespawn = 1
+commonOption.allowCustomClasses = 1
+commonOption.classPickCount = 10
+commonOption.maxHealth = 100.000000
+commonOption.healthRegen = 4.000000
+commonOption.preRoundTimer = 5.0
+commonOption.preMatchTimer = 15.000000
+commonOption.broadcasterEnabled = 1
+ballData.ballResetTime = 15
+ballData.carryScore = 7
+ballData.throwScore = 3
+ballData.armorValue = 100

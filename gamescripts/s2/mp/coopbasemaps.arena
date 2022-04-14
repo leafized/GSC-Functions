@@ -1,0 +1,35 @@
+{
+	map			"mp_laser2"
+	longname	"MPUI_LASER2"
+	gametype	"dm war dom conf sd hp sr twar infect ball"
+	description	"MPUI_DESC_MAP_LASER2"
+	mapimage	"preview_mp_laser2"
+	mapoverlay	"compass_overlay_map_blank"
+	allieschar	"sentinel"
+	axischar	"atlas"
+	environment	"woodland"
+	mappack		"0"
+}
+
+{
+	map			"mp_prison"
+	longname	"MPUI_PRISON"
+	gametype	"dm war dom conf sd hp sr twar infect ball"
+	description	"MPUI_DESC_MAP_PRISON"
+	mapimage	"preview_mp_prison"
+	mapoverlay	"compass_overlay_map_blank"
+	allieschar	"sentinel"
+	axischar	"atlas"
+	environment	"urban"
+	mappack		"0"
+}
+
+{
+	map			"mp_vlobby_room"
+	gametype	"vlobby"
+	allieschar	"sentinel_vl"
+	axischar	"atlas"
+	environment	"urban"
+	mappack		"16384"
+}
+

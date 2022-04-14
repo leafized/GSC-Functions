@@ -1,0 +1,8 @@
+Name,Image,Description,Accuracy Modifier,Range Modifier,Fire Rate Modifier,Damage Modifier,
+stockpile,mp_weapon_perk_stockpile,WEAPON_PERK_DESCRIPTION_STOCKPILE,5,-5,1,-5,
+high_capacity,mp_weapon_perk_high_capacity,WEAPON_PERK_DESCRIPTION_HIGH_CAPACITY,5,-5,1,-5,
+speed_reload,mp_weapon_perk_speed_reload,WEAPON_PERK_DESCRIPTION_SPEED_RELOAD,5,-5,1,-5,
+buffer,mp_weapon_perk_buffer,WEAPON_PERK_DESCRIPTION_BUFFER,5,-5,1,-5,
+scout,mp_weapon_perk_scout,WEAPON_PERK_DESCRIPTION_SCOUT,5,-5,1,-5,
+black_tip,mp_weapon_perk_black_tip,WEAPON_PERK_DESCRIPTION_BLACK_TIP,5,-5,1,-5,
+transition,mp_weapon_perk_transition,WEAPON_PERK_DESCRIPTION_TRANSITION,5,-5,1,-5,

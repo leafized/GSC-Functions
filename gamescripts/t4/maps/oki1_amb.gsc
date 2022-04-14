@@ -1,0 +1,5 @@
+// Ambients Level File
+
+main()
+{
+}

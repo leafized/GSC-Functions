@@ -1,0 +1,883 @@
+syntax="proto2";
+package dlog;
+
+message record {
+	optional string identifier = 1;
+	optional string layout = 2;
+	optional bytes data = 3;
+	optional string project = 4;
+	optional string checksum = 5;
+}
+message telemetry_header {
+	optional uint32 utc_timestamp_sent = 1;
+	optional string action_type = 2;
+	optional string game_version = 3;
+	optional string platform = 4;
+	optional uint32 title_id = 5;
+	optional int32 source_version = 6;
+}
+message client_header {
+	optional uint64 user_id = 1;
+	optional uint64 uno_id = 2;
+	optional uint64 user_session_id = 3;
+	optional uint32 user_event_id = 4;
+	optional uint64 server_session_id = 5;
+	optional uint32 server_event_id = 6;
+	optional uint64 lobby_guid = 7;
+	optional uint64 console_id = 8;
+	optional uint64 connection_id = 9;
+	optional string gamer_tag = 10;
+	optional string nat_type = 11;
+	optional string timezone = 12;
+	optional string language = 13;
+	optional string country = 14;
+	optional uint32 ip = 15;
+	optional uint32 lobby_type = 16;
+	optional bool is_splitscreen = 17;
+	optional bool is_guest = 18;
+	optional bool is_trial = 19;
+}
+message start_campaign {
+	optional string campaign_start_type = 1;
+}
+message defeat_level {
+	optional string game_level = 1;
+	optional string game_difficulty = 2;
+}
+message prestige {
+	optional int32 new_prestige = 1;
+	optional int32 old_prestige = 2;
+}
+message create_account {
+	optional bool opt_in_flag = 1;
+}
+message screen_view {
+	optional string screen_id = 1;
+	optional uint32 screen_duration_ms = 2;
+	optional bool is_live_lobby = 3;
+	optional bool is_intermission = 4;
+}
+message emblem_create {
+	optional int32 dummy_field = 1;
+}
+message emblem_save {
+	optional int32 dummy_field = 1;
+}
+message survey_result {
+	optional int32 survey_id = 1;
+	optional int32 version = 2;
+	optional string order = 3;
+	optional int32 answer_id = 4;
+	optional uint64 match_id = 5;
+	optional bool quitter = 6;
+	optional int32 hover_id = 7;
+}
+message hq_event_base {
+	optional uint64 hq_guid = 1;
+	optional int32 utc_timestamp_join = 2;
+	optional int32 data_center_id = 3;
+	optional int32 game_time = 4;
+	optional int32 player_index = 5;
+	optional int32 player_count = 6;
+	optional string event_name = 7;
+	optional string event_category = 8;
+	optional int32 duration_seconds = 9;
+}
+message hq_join {
+	optional string join_type = 1;
+}
+message hq_leave {
+	optional string reason = 1;
+}
+message hq_mp_npc_visit {
+}
+message hq_war_npc_visit {
+}
+message hq_dom_visit {
+}
+message hq_ranked_visit {
+}
+message hq_commander_visit {
+}
+message hq_r_and_r_visit {
+}
+message hq_lfg_visit {
+}
+message hq_social_visit {
+}
+message hq_score_streak_visit {
+}
+message hq_zm_npc_visit {
+}
+message hq_theatre_visit {
+	optional string channels_watched = 1;
+}
+message hq_scorestreak_training {
+	optional string scorestreaks_used = 1;
+}
+message hq_prestige_visit {
+	optional int32 old_prestige = 1;
+	optional int32 new_prestige = 2;
+}
+message hq_quartermaster_visit {
+}
+message hq_operations_visit {
+}
+message hq_gunsmith_visit {
+}
+message hq_mail_visit {
+}
+message hq_boxing_match_end {
+	optional string match_id = 1;
+	optional string winloss = 2;
+}
+message hq_1v1_queue_end {
+	optional string reason = 1;
+}
+message hq_1v1_match_end {
+	optional uint64 match_id = 1;
+	optional int32 kills = 2;
+	optional string winloss = 3;
+}
+message hq_firing_range_shootout_end {
+	optional string shootout_guid = 1;
+	optional int32 score = 2;
+	optional string winloss = 3;
+}
+message hq_firing_range_practice {
+}
+message store_entry {
+	optional string game_pillar = 1;
+	optional string region = 2;
+	optional string source_screen_id = 3;
+}
+message store_item_view {
+	optional int32 item_id = 1;
+	optional int32 duration_ms = 2;
+	optional string game_pillar = 3;
+	optional string region = 4;
+	optional string source_screen_id = 5;
+}
+message store_purchase {
+	optional string product_id = 1;
+	optional string product_name = 2;
+	optional int32 price = 3;
+	optional string currency = 4;
+	optional string transaction_result = 5;
+	optional bool is_entitled = 6;
+}
+message crm_message {
+	optional string crm_message_id = 1;
+	optional string crm_screen_id = 2;
+	optional int32 interaction_type = 3;
+	optional string interaction_detail = 4;
+	optional string button_value = 5;
+}
+message session_start {
+	optional int32 bandwidth_up = 1;
+	optional bool new_user = 2;
+	optional bool dlc1_owned = 3;
+	optional bool dlc2_owned = 4;
+	optional bool dlc3_owned = 5;
+	optional bool dlc4_owned = 6;
+	optional bool season_pass_owned = 7;
+}
+message start_match {
+	optional string game_map = 1;
+	optional string game_mode = 2;
+	optional int32 game_playlist_id = 3;
+	optional string game_playlist_name = 4;
+	optional string game_variant = 5;
+}
+message end_match {
+	optional uint64 match_id = 1;
+}
+message control_settings {
+	optional bool invert_pitch = 1;
+	optional bool sprint_cancel = 2;
+	optional bool auto_mantle = 3;
+}
+message key_binding {
+	optional string cmd = 1;
+	optional uint32 key_id = 2;
+	optional string key_name = 3;
+}
+message gamepad_settings {
+	optional bool enabled = 1;
+	optional bool rumble = 2;
+	optional float turn_horz = 3;
+	optional float turn_vert = 4;
+	optional bool ads_turn_enabled = 5;
+	optional float ads_turn_horz = 6;
+	optional float ads_turn_vert = 7;
+	optional uint32 aim_curve = 8;
+	optional bool aim_lockon = 9;
+	optional bool aim_slowdown = 10;
+}
+message display_settings {
+	optional float cg_fov = 1;
+	optional string refresh_rate = 2;
+	optional string adapter = 3;
+	optional string monitor = 4;
+	optional uint32 aspect_ratio = 5;
+	optional int32 vid_width = 6;
+	optional int32 vid_height = 7;
+	optional bool fullscreen = 8;
+	optional bool fullscreen_window = 9;
+	optional uint32 dof_limit = 10;
+	optional uint32 mb_limit = 11;
+	optional uint32 ssao_limit = 12;
+	optional uint32 mdao_limit = 13;
+	optional uint32 image_quality = 14;
+	optional uint32 sss_limit = 15;
+	optional uint32 post_aa_mode = 16;
+	optional uint32 sss_force = 17;
+	optional uint32 picmip = 18;
+	optional uint32 picmip_bump = 19;
+	optional uint32 picmip_spec = 20;
+	optional uint32 sun_shadow_bit_depth = 21;
+	optional int32 video_ram = 22;
+	optional int32 system_ram = 23;
+}
+message render_performance {
+	optional int32 max_fps = 1;
+	optional float avg_frame_time = 2;
+	optional float stddev_frame_time = 3;
+	optional int32 total_frames = 4;
+	optional int32 total_time = 5;
+	optional int32 bin0 = 6;
+	optional int32 bin1 = 7;
+	optional int32 bin2 = 8;
+	optional int32 bin3 = 9;
+	optional int32 bin4 = 10;
+}
+message loot_drop {
+	optional uint64 loot_cost = 1;
+	optional int32 loot_currency = 2;
+	optional uint64 bonus_value = 3;
+	optional int32 quantity = 4;
+	optional uint64 balance_keys = 5;
+	optional uint64 balance_salvage = 6;
+	optional uint64 balance_cp = 7;
+}
+message loot_drop_item {
+	optional int32 item_id = 1;
+	optional string item_rarity = 2;
+	optional string item_category = 3;
+}
+message craft_item {
+	optional int32 item_id = 1;
+	optional string item_rarity = 2;
+	optional string item_category = 3;
+	optional uint64 balance_keys = 4;
+	optional uint64 balance_salvage = 5;
+	optional uint64 balance_cp = 6;
+}
+message exchange_loot {
+	optional int32 item_id = 1;
+	optional string item_rarity = 2;
+	optional string item_category = 3;
+	optional uint64 balance_keys = 4;
+	optional uint64 balance_salvage = 5;
+	optional uint64 balance_cp = 6;
+}
+message test {
+	optional int32 int16 = 1;
+	optional int32 int32 = 2;
+	optional uint32 uint8 = 3;
+	optional uint32 uint32 = 4;
+	optional uint64 uint64 = 5;
+	optional bool bool = 6;
+	optional float float = 7;
+	optional string string = 8;
+	optional bytes bytes = 9;
+	repeated int32 int16_array = 10;
+	repeated int32 int32_array = 11;
+	repeated uint32 uint8_array = 12;
+	repeated uint32 uint32_array = 13;
+	repeated uint64 uint64_array = 14;
+	repeated bool bool_array = 15;
+	repeated float float_array = 16;
+	repeated string string_array = 17;
+}
+message error {
+	optional int32 category_id = 1;
+	optional string message = 2;
+	optional uint32 code = 3;
+	optional string stack_trace = 4;
+	optional uint64 match_id = 5;
+}
+message metric {
+	optional string build_config = 1;
+	optional string event = 2;
+	optional string channel = 3;
+	optional string serializer = 4;
+	optional string endpoint = 5;
+	optional uint32 count = 6;
+	optional uint32 bytes_total = 7;
+	optional uint32 bytes_average = 8;
+	optional uint32 bytes_peak = 9;
+	optional float time_total_ms = 10;
+	optional float time_average_ms = 11;
+	optional float time_peak_ms = 12;
+}
+message cod_account {
+	optional string action = 1;
+}
+message player_rank_irregularity {
+	optional uint32 count = 1;
+	optional uint32 prestige = 2;
+	optional uint32 rank = 3;
+	optional uint32 last_irregularity_rank = 4;
+	optional uint32 last_irregularity_fulfilled_times = 5;
+}
+message bios {
+	optional string version = 1;
+	optional string release_date = 2;
+	optional string manufacturer = 3;
+}
+message virtual_machine {
+	optional string platform_name = 1;
+	optional string platform_version = 2;
+	optional string host_product_name = 3;
+	optional string host_product_version = 4;
+}
+message windows_experience_index {
+	optional float d3d = 1;
+	optional float memory = 2;
+	optional float system = 3;
+	optional float cpu = 4;
+	optional float disk = 5;
+	optional float graphics = 6;
+}
+message operating_system {
+	optional string build = 1;
+	optional string product_name = 2;
+	optional string build_lab_ex = 3;
+	optional string language = 4;
+	optional string manufacturer = 5;
+	optional string build_lab = 6;
+	optional string product_version = 7;
+	optional bool bootcamp = 8;
+	optional uint64 time_zone_utc_bias_mins = 9;
+	optional string architecture = 10;
+	optional uint64 time_zone_utc_offset_mins = 11;
+	optional string locale = 12;
+	optional string service_pack_name = 13;
+	optional string service_pack_version = 14;
+}
+message processor {
+	optional string extended_feature_flags = 1;
+	optional uint64 structured_extended_features_ebx_0 = 2;
+	optional string product_name = 3;
+	optional string structured_extended_feature_flags = 4;
+	optional uint64 features_ecx = 5;
+	optional uint64 core_count = 6;
+	optional uint64 max_frequency_hz = 7;
+	optional uint64 extended_features_ecx = 8;
+	optional uint64 structured_extended_features_ecx_0 = 9;
+	optional uint64 extended_features_edx = 10;
+	optional uint64 family = 11;
+	optional uint64 features_edx = 12;
+	optional string manufacturer = 13;
+	optional uint64 thread_count = 14;
+	optional string architecture = 15;
+	optional string feature_flags = 16;
+	optional uint64 stepping = 17;
+	optional uint64 model = 18;
+}
+message desktop_settings {
+	optional int32 graphics_adapter_index = 1;
+	optional int32 display_device_index = 2;
+	optional uint64 pixel_width = 3;
+	optional uint64 desktop_width = 4;
+	optional uint64 pixel_height = 5;
+	optional uint64 desktop_height = 6;
+	optional bool is_main = 7;
+	optional uint64 bits_per_pixel = 8;
+	optional uint64 refresh_rate = 9;
+	optional uint64 desktop_y = 10;
+	optional uint64 desktop_x = 11;
+	optional uint64 dpi = 12;
+}
+message display_device {
+	optional int32 index = 1;
+	optional int32 graphics_adapter_index = 2;
+	optional bool is_builtin = 3;
+	optional string product_name = 4;
+	optional string manufacturer = 5;
+	optional uint64 year_manufactured = 6;
+	optional uint64 physical_height_mm = 7;
+	optional uint64 serial_number = 8;
+	optional uint64 preferred_height = 9;
+	optional string pnp_id = 10;
+	optional uint64 physical_width_mm = 11;
+	optional uint64 preferred_width = 12;
+	optional string product_id = 13;
+}
+message graphics_adapter {
+	optional int32 index = 1;
+	optional string product_name = 2;
+	optional string directx9_support = 3;
+	optional uint64 vendor_id = 4;
+	optional string driver = 5;
+	optional uint64 frequency = 6;
+	optional string pnp_id = 7;
+	optional uint64 subsystem_id = 8;
+	optional uint64 vram = 9;
+	optional uint64 revision_id = 10;
+	optional uint64 device_id = 11;
+	optional string driver_provider = 12;
+	optional string driver_version = 13;
+	optional string type = 14;
+}
+message endpoint_device {
+	optional int32 audio_adapter_index = 1;
+	optional string dataflow = 2;
+	optional uint64 sample_rate_hz = 3;
+	optional bool mute = 4;
+	optional float volume = 5;
+	optional uint64 channels = 6;
+	optional bool is_default = 7;
+	optional string form_factor = 8;
+	optional string description = 9;
+}
+message audio_adapter {
+	optional int32 index = 1;
+	optional uint64 revision_id = 2;
+	optional uint64 vendor_id = 3;
+	optional string manufacturer = 4;
+	optional string driver_provider = 5;
+	optional uint64 device_id = 6;
+	optional string driver = 7;
+	optional uint64 subsystem_id = 8;
+	optional string description = 9;
+	optional string hardware_type = 10;
+	optional string driver_version = 11;
+}
+message input_device {
+	optional string product_name = 1;
+	optional uint64 vendor_id = 2;
+	optional string manufacturer = 3;
+	optional string transport = 4;
+	optional string type = 5;
+	optional uint64 pointer_button_count = 6;
+	optional uint64 product_id = 7;
+}
+message volume {
+	optional int32 storage_device_index = 1;
+	optional bool is_network_volume = 2;
+	optional string uuid = 3;
+	optional string name = 4;
+	optional uint64 free_bytes = 5;
+	optional string device_path = 6;
+	optional bool is_case_sensitive = 7;
+	optional string filesystem = 8;
+	optional uint64 total_bytes = 9;
+	optional bool is_encrypted = 10;
+}
+message storage_device {
+	optional int32 index = 1;
+	optional string firmware_revision = 2;
+	optional string product_name = 3;
+	optional uint64 capacity = 4;
+	optional string device_type = 5;
+	optional string model = 6;
+	optional uint64 rotations_per_min = 7;
+	optional string serial_number = 8;
+}
+message bluetooth_radio {
+	optional uint64 vendor_id = 1;
+	optional uint64 product_id = 2;
+	optional uint64 hci_version = 3;
+	optional uint64 hci_revision = 4;
+	optional uint64 manufacturer_id = 5;
+	optional uint64 lmp_version = 6;
+	optional uint64 lmp_subversion = 7;
+	optional uint64 features = 8;
+	optional uint64 features_ext_1 = 9;
+}
+message system {
+	optional string uuid = 1;
+	optional string model = 2;
+	optional string manufacturer = 3;
+	optional bool has_battery = 4;
+	optional uint64 memory_size = 5;
+}
+message hardware_survey {
+	optional string client_version = 1;
+	optional uint64 data_version = 2;
+	optional string report_uuid = 3;
+	optional string report_datetime = 4;
+}
+message discord_end_match {
+	optional int32 up_time_sec = 1;
+	optional int32 down_time_sec = 2;
+	optional int32 total_time_sec = 3;
+	optional int32 count_connects = 4;
+	optional int32 count_disconnects = 5;
+	optional int32 count_errors = 6;
+	optional int32 count_presence_push = 7;
+	optional int32 count_join_on_invite = 8;
+	optional int32 count_ask_to_join = 9;
+	optional int32 count_ask_to_join_invalid = 10;
+	optional int32 count_ask_to_join_toasted = 11;
+	optional int32 count_ask_to_join_accepted = 12;
+	optional int32 count_ask_to_join_rejected = 13;
+	optional int32 count_ask_to_join_ignored = 14;
+	optional int32 count_ask_to_join_expired = 15;
+	optional int32 count_settings_access = 16;
+}
+message discord_end_match_profile {
+	optional uint32 presence_mode = 1;
+	optional uint32 presence_message = 2;
+	optional uint32 join_post_mode = 3;
+	optional uint32 join_ask_mode = 4;
+	optional uint32 auto_response_mode = 5;
+	optional bool auto_response = 6;
+}
+message crash_report {
+	optional string signature = 1;
+	optional string exe_name = 2;
+	optional string exe_signature = 3;
+	optional string key = 4;
+	optional uint64 match_id = 5;
+	optional string guid_a = 6;
+	optional string guid_d = 7;
+	optional string message = 8;
+	optional uint32 code = 9;
+	optional bytes dump = 10;
+}
+message supply_drop_open {
+	optional int32 type = 1;
+	optional int32 hq_context = 2;
+	optional string cl_transaction_id = 3;
+}
+message supply_drop_result {
+	optional int32 status = 1;
+	optional int32 error = 2;
+	optional string cl_transaction_id = 3;
+	optional uint64 dw_transaction_id = 4;
+}
+message intramatch_round {
+	optional uint32 time_ms = 1;
+	optional uint32 axis_score = 2;
+	optional uint32 allies_score = 3;
+	optional bool is_overtime = 4;
+}
+message intramatch_gameevent {
+	optional uint32 life_index = 1;
+	optional string event_type = 2;
+	optional uint32 event_time_ms = 3;
+	repeated int32 event_pos = 4;
+	optional uint32 extra_data = 5;
+}
+message intramatch_spawn {
+	optional uint32 life_index = 1;
+	optional uint32 player_index = 2;
+	repeated int32 spawn_pos = 3;
+	optional uint32 spawn_time_ms = 4;
+	optional uint32 loadout_index = 5;
+}
+message intramatch_death {
+	optional uint32 life_index = 1;
+	optional uint32 player_index = 2;
+	repeated int32 death_pos = 3;
+	optional uint32 death_time_ms = 4;
+	optional uint32 victim_weapon_guid = 5;
+	optional uint32 attacker_life_index = 6;
+	optional uint32 attacker_player_index = 7;
+	repeated int32 attacker_pos = 8;
+	optional uint32 attacker_weapon_guid = 9;
+}
+message intramatch_death_modifier {
+	optional uint32 life_index = 1;
+	optional uint32 player_index = 2;
+	optional string modifier = 3;
+}
+message intramatch_multikill {
+	optional uint32 life_index = 1;
+	optional uint32 player_index = 2;
+	optional uint32 multikill = 3;
+}
+message intramatch_killstreak {
+	optional uint32 life_index = 1;
+	optional uint32 player_index = 2;
+	optional string event_type = 3;
+	optional uint32 event_time_ms = 4;
+	repeated int32 event_pos = 5;
+	optional bool deployed = 6;
+}
+message first_party_trophy {
+	optional string trophy_name = 1;
+	optional uint32 level_time_ms = 2;
+}
+message experiment_hash {
+	optional string experiment_salt = 1;
+	optional int32 hash_mod_value = 2;
+	optional string hash_xuid = 3;
+}
+message ranked_calc_team_mmr_summary {
+	optional float z_diff = 1;
+	optional float perf_model_sigma = 2;
+	optional float perf_model_comp = 3;
+}
+message ranked_calc_team_mmr_player {
+	optional int32 client_index = 1;
+	optional bool exists = 2;
+	optional bool initialized = 3;
+	optional int32 client_num = 4;
+	optional int32 team = 5;
+	optional float initial_mmr = 6;
+	optional float initial_mmr_min = 7;
+	optional int32 lockout_strikes = 8;
+	optional uint32 games_completed = 9;
+	optional uint32 games_abandoned = 10;
+	optional uint32 games_total = 11;
+	optional bool placement_enabled = 12;
+	optional int32 tier = 13;
+}
+message ranked_calc_team_mmr_team {
+	optional int32 team_index = 1;
+	optional float p_win = 2;
+	optional float mmr_average = 3;
+	optional int32 player_count = 4;
+	optional float mmr_total = 5;
+}
+message telemetry_start_campaign_event {
+	optional telemetry_header telemetry = 1;
+	optional client_header client = 2;
+	optional start_campaign start_campaign = 3;
+}
+message telemetry_defeat_level_event {
+	optional telemetry_header telemetry = 1;
+	optional client_header client = 2;
+	optional defeat_level defeat_level = 3;
+}
+message telemetry_prestige_event {
+	optional telemetry_header telemetry = 1;
+	optional client_header client = 2;
+	optional prestige prestige = 3;
+}
+message telemetry_create_account_event {
+	optional telemetry_header telemetry = 1;
+	optional client_header client = 2;
+	optional create_account create_account = 3;
+}
+message telemetry_screen_view_event {
+	optional telemetry_header telemetry = 1;
+	optional client_header client = 2;
+	optional screen_view screen_view = 3;
+}
+message telemetry_emblem_create_event {
+	optional telemetry_header telemetry = 1;
+	optional client_header client = 2;
+	optional emblem_create emblem_create = 3;
+}
+message telemetry_emblem_save_event {
+	optional telemetry_header telemetry = 1;
+	optional client_header client = 2;
+	optional emblem_save emblem_save = 3;
+}
+message telemetry_survey_event {
+	optional telemetry_header telemetry = 1;
+	optional client_header client = 2;
+	optional survey_result survey = 3;
+}
+message telemetry_hq_event {
+	optional telemetry_header telemetry = 1;
+	optional client_header client = 2;
+	optional hq_event_base base = 3;
+	optional hq_join join = 4;
+	optional hq_leave leave = 5;
+	optional hq_mp_npc_visit mp_npc_visit = 6;
+	optional hq_war_npc_visit war_npc_visit = 7;
+	optional hq_zm_npc_visit zm_npc_visit = 8;
+	optional hq_theatre_visit theatre_visit = 9;
+	optional hq_scorestreak_training scorestreak_training = 10;
+	optional hq_prestige_visit prestige_visit = 11;
+	optional hq_quartermaster_visit quartermaster_visit = 12;
+	optional hq_operations_visit operations_visit = 13;
+	optional hq_gunsmith_visit gunsmith_visit = 14;
+	optional hq_mail_visit mail_visit = 15;
+	optional hq_boxing_match_end boxing_match = 16;
+	optional hq_1v1_queue_end hq_1v1_queue_end = 17;
+	optional hq_1v1_match_end hq_1v1_match = 18;
+	optional hq_firing_range_shootout_end fr_shootout = 19;
+	optional hq_firing_range_practice fr_practice = 20;
+	optional hq_score_streak_visit score_streak_visit = 21;
+	optional hq_ranked_visit ranked_visit = 22;
+	optional hq_r_and_r_visit r_and_r_visit = 23;
+	optional hq_lfg_visit lfg_visit = 24;
+	optional hq_dom_visit dom_visit = 25;
+	optional hq_commander_visit commander_visit = 26;
+	optional hq_social_visit social_visit = 27;
+}
+message telemetry_store_entry_event {
+	optional telemetry_header telemetry = 1;
+	optional client_header client = 2;
+	optional store_entry store_entry = 3;
+}
+message telemetry_store_purchase_event {
+	optional telemetry_header telemetry = 1;
+	optional client_header client = 2;
+	optional store_purchase store_purchase = 3;
+}
+message telemetry_store_item_view_event {
+	optional telemetry_header telemetry = 1;
+	optional client_header client = 2;
+	optional store_item_view store_item_view = 3;
+}
+message telemetry_crm_message_event {
+	optional telemetry_header telemetry = 1;
+	optional client_header client = 2;
+	optional crm_message crm_message = 3;
+}
+message telemetry_session_start_event {
+	optional telemetry_header telemetry = 1;
+	optional client_header client = 2;
+	optional session_start session_start = 3;
+}
+message telemetry_start_match_event {
+	optional telemetry_header telemetry = 1;
+	optional client_header client = 2;
+	optional start_match start_match = 3;
+}
+message telemetry_loot_drop_event {
+	optional telemetry_header telemetry = 1;
+	optional client_header client = 2;
+	optional loot_drop loot_drop = 3;
+	repeated loot_drop_item loot_drop_item = 4;
+}
+message telemetry_craft_item_event {
+	optional telemetry_header telemetry = 1;
+	optional client_header client = 2;
+	optional craft_item craft_item = 3;
+}
+message telemetry_exchange_loot_event {
+	optional telemetry_header telemetry = 1;
+	optional client_header client = 2;
+	optional exchange_loot exchange_loot = 3;
+}
+message telemetry_test_event {
+	optional test test = 1;
+}
+message telemetry_error_event {
+	optional telemetry_header telemetry = 1;
+	optional client_header client = 2;
+	optional error error = 3;
+}
+message telemetry_metric_event {
+	optional telemetry_header telemetry = 1;
+	optional client_header client = 2;
+	repeated metric metric = 3;
+}
+message telemetry_cod_account_event {
+	optional telemetry_header telemetry = 1;
+	optional client_header client = 2;
+	optional cod_account cod_account = 3;
+}
+message telemetry_player_rank_irregularity_event {
+	optional telemetry_header telemetry = 1;
+	optional client_header client = 2;
+	optional player_rank_irregularity player_rank_irregularity = 3;
+}
+message telemetry_hardware_survey_event {
+	optional telemetry_header telemetry = 1;
+	optional client_header client = 2;
+	optional hardware_survey hardware_survey = 3;
+	optional system system = 4;
+	optional bios bios = 5;
+	optional virtual_machine virtual_machine = 6;
+	optional operating_system operating_system = 7;
+	optional windows_experience_index windows_experience_index = 8;
+	repeated processor processor = 9;
+	repeated graphics_adapter graphics_adapter = 10;
+	repeated display_device display_device = 11;
+	repeated desktop_settings desktop_settings = 12;
+	repeated audio_adapter audio_adapter = 13;
+	repeated endpoint_device endpoint_device = 14;
+	repeated input_device input_device = 15;
+	repeated storage_device storage_device = 16;
+	repeated volume volume = 17;
+	optional bluetooth_radio bluetooth_radio = 18;
+}
+message telemetry_discord_end_match_event {
+	optional telemetry_header telemetry = 1;
+	optional client_header client = 2;
+	optional discord_end_match discord_end_match = 3;
+	optional discord_end_match_profile discord_end_match_profile = 4;
+}
+message telemetry_end_match_event {
+	optional telemetry_header telemetry = 1;
+	optional client_header client = 2;
+	optional end_match end_match = 3;
+	optional control_settings ctl = 4;
+	optional gamepad_settings gpad = 5;
+	optional display_settings r = 6;
+	optional render_performance perf = 7;
+	repeated key_binding kb = 8;
+}
+message telemetry_crash_report_event {
+	optional telemetry_header telemetry = 1;
+	optional client_header client = 2;
+	optional crash_report crash_report = 3;
+}
+message telemetry_open_sd_event {
+	optional telemetry_header telemetry = 1;
+	optional client_header client = 2;
+	optional supply_drop_open supply_drop = 3;
+}
+message telemetry_sd_result_event {
+	optional telemetry_header telemetry = 1;
+	optional client_header client = 2;
+	optional supply_drop_result sd_result = 3;
+}
+message telemetry_trophy_event {
+	optional telemetry_header telemetry = 1;
+	optional client_header client = 2;
+	optional first_party_trophy trophy = 3;
+}
+message telemetry_experiment_hash_event {
+	optional telemetry_header telemetry = 1;
+	optional client_header client = 2;
+	optional experiment_hash experiment = 3;
+}
+message dtel_round_start {
+	optional telemetry_header telemetry = 1;
+	optional intramatch_round round_start = 2;
+}
+message dtel_round_end {
+	optional telemetry_header telemetry = 1;
+	optional intramatch_round round_end = 2;
+}
+message dtel_gameevent {
+	optional telemetry_header telemetry = 1;
+	optional intramatch_gameevent gameevent = 2;
+}
+message dtel_spawn {
+	optional telemetry_header telemetry = 1;
+	optional intramatch_spawn spawn = 2;
+}
+message dtel_death {
+	optional telemetry_header telemetry = 1;
+	optional intramatch_death death = 2;
+}
+message dtel_death_modifier {
+	optional telemetry_header telemetry = 1;
+	optional intramatch_death_modifier death = 2;
+}
+message dtel_multikill {
+	optional telemetry_header telemetry = 1;
+	optional intramatch_multikill death = 2;
+}
+message dtel_killstreak {
+	optional telemetry_header telemetry = 1;
+	optional intramatch_killstreak killstreak = 2;
+}
+message event_ranked_calc_team_mmr {
+	optional telemetry_header telemetry = 1;
+	optional ranked_calc_team_mmr_summary summary = 2;
+	repeated ranked_calc_team_mmr_player player = 3;
+	repeated ranked_calc_team_mmr_team team = 4;
+}

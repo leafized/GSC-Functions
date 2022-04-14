@@ -1,0 +1,6 @@
+bronze,-6.0,-2.0,-3.0,LUA_MENU_BRONZE_CAPS,ranked_play_bronze,
+silver,-2.0,0.0,-1.0,LUA_MENU_SILVER_CAPS,ranked_play_silver,
+gold,0.0,2.0,1.0,LUA_MENU_GOLD_CAPS,ranked_play_gold,
+platinum,2.0,4.0,3.0,LUA_MENU_PLATINUM_CAPS,ranked_play_platinum,
+diamond,4.0,6.0,3.0,LUA_MENU_DIAMOND_CAPS,ranked_play_diamond,
+master,6.0,1000.0,3.0,LUA_MENU_MASTER_CAPS,ranked_play_master,

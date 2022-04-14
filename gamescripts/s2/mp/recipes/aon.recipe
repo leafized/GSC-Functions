@@ -1,0 +1,13 @@
+gametype = blades
+commonOption.timeLimit = 5.000000
+commonOption.scoreLimit = 0
+commonOption.preMatchTimer = 15.000000
+commonOption.showKillcam = 1
+commonOption.spectateModeAllowed = 0
+commonOption.forceRespawn = 1
+commonOption.allowCustomClasses = 0
+commonOption.maxHealth = 100.000000
+commonOption.healthRegen = 4.000000
+commonOption.broadcasterEnabled = 1
+commonOption.radarMode = 1
+commonOption.disableMGNests = 1
