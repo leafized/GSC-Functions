@@ -21,3 +21,8 @@ This repository is a collection of scripts I am currently writing, or have writt
 These scripts should help mod developers with their work if they choose to use it.
 
 This project is not afiliated with InfinityLoader, Shiversoftdev (or his compiler).
+
+# How to understand s2 gamescripts
+- Open iw6 scripts as well as s2 scripts, the hashed functions share similarities and should be easily identifiable.
+- Using the https://github.com/leafized/s2functions/ repository, it should be easy to see the comparison.
+- Note that this really only applies for MP, ZM uses a lot of unique functions and will require extensive knowledge of scripting styles to sort this out. It's not impossible, but takes time to get used to.
