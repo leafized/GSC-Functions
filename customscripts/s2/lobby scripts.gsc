@@ -174,7 +174,6 @@ pPickClass(player = self)
     player waittill( "luinotifyserver", channel, newClass );
     player.var_2327 = 0;
     player.var_4B62 = 1;
-    //maps\mp\gametypes\_class::func_864F(self.var_012C["class"]);
     player.var_95AE = undefined;
     player.var_95AF = undefined;
     maps\mp\gametypes\_class::func_4790(self.var_012C["team"],self.var_012C["class"]);
