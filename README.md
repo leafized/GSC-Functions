@@ -1,14 +1,17 @@
 # GSC-Functions
-Compilation of GSC functions I've created, as well as game dumps for iw4,iw6,t4,t5,t6,t7,t8,s2 and more will be added.
+Compilation of GSC functions, as well as game dumps for iw4,iw6,t4,t5,t6,t7,t8,s2 and more will be added.
 This project is an independent collection of scripts for call of duty games. These functions are useful for mods, menus, modes, and more.
 There is also a utilites file in custom scripts that is from InfinityLoader. These utilities should help with anything in this project.
 If any script requires a utility outside of itself, it will be provided in the same file below, or it will be noted that it is inside the utility file.
 
-This project is going to be maintained, and I will be sure to credit the creators.
+# Full Menus Folder
+- This folder contains projects that were made by members of this repo, or were given permission to be posted in this repo.
+- This repo is open source, and everything in this source is free-to-use.
 # Contributors
 - Leafized
 - Gillam
 - AndyM
+
 # Credits
 Extinct, CF4_99, Candy, P!X, Serious (This project may not directly use any of their work, however I've learned from these people.)
 Gillam, has been a big partner of mine, and deserved his own place in these credits.
