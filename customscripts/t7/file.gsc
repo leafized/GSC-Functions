@@ -4,10 +4,11 @@
     This is a placeholder and will have a nullptr script. 
 */
 
-nullptr()
+nullptr() // Can be used to null any functions stored in level variables (level.onplayerkilled as an example).
 {
-    //nothingness
-}//can be used to null any functions stored in level variables (level.onplayerkilled as an example).
+    //nothing
+}
+
 helloWorld()
 {
     self iprintln("Hello World");
