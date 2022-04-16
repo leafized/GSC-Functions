@@ -16,7 +16,7 @@ setVision(vision, time)
     FUNCTION CALLER: player
     FUNCTION INPUT: isHost()
     DESCRIPTION: Grabs the hosts entity number
-    NOTES: Mainly for games/modes that does not have a bulit in function for isHost(Ie BO1 Zombies, Waw Zombies)
+    NOTES: Mainly for games/modes that does not have a bulit in function for isHost(Ie BO1 Zombies, WAW Zombies)
 */
 
 isHost()
