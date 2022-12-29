@@ -7,12 +7,15 @@ If any script requires a utility outside of itself, it will be provided in the s
 # Full Menus Folder
 - This folder contains projects that were made by members of this repo, or were given permission to be posted in this repo.
 - This repo is open source, and everything in this source is free-to-use.
+- Game Scripts -> default game scripts, ripped from game, not modified
+- Universal Scripts -> scripts that work on most games.
 # Contributors
 - Leafized
 - Gillam
 - AndyM
 
 # Credits
+AgreedBog381 - Decompiling scripts for s1,h1, s2, iw6, t7
 Extinct, CF4_99, Candy, P!X, Serious (This project may not directly use any of their work, however I've learned from these people.)
 Gillam, has been a big partner of mine, and deserved his own place in these credits.
 P!X, has taught me a lot of what I know today, and is the creator of my first menu base.
