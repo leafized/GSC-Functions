@@ -7,8 +7,7 @@ If any script requires a utility outside of itself, it will be provided in the s
 # Full Menus Folder
 - This folder contains projects that were made by members of this repo, or were given permission to be posted in this repo.
 - This repo is open source, and everything in this source is free-to-use.
-- Game Scripts -> default game scripts, ripped from game, not modified
-- Universal Scripts -> scripts that work on most games.
+
 # Contributors
 - Leafized
 - Gillam
